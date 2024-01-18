@@ -14,7 +14,8 @@ const Product = () => {
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    if (id && !product) dispatch.productModel.getProductById(id);
+    if (id && !product) {
+      dispatch.productModel.getProductById(id);}
     return () => {
       dispatch.productModel.clearState();
     };

@@ -72,6 +72,10 @@ export const cartModel = createModel<RootModel>()({
       try {
         const response = await axios.post(GET_PAYMENT_LINK, {
           description: "hedsWORLD checkout",
+          idempotencyKey: '',
+          checkoutOptions: {
+            askForShippingAddress: true,
+          },
           order: {
             locationId: locationId,
             lineItems,

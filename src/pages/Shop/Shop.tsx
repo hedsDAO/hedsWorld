@@ -17,7 +17,7 @@ const Landing = () => {
 
   useEffect(() => {
     if (isFirstLanding) dispatch.landingModel.handleLanding();
-    if (allProducts) dispatch.landingModel.getProducts();
+    if (!allProducts) dispatch.landingModel.getProducts();
   }, []);
 
   return (
