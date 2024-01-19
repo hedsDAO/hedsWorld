@@ -68,11 +68,10 @@ export const cartModel = createModel<RootModel>()({
         catalogObjectId: item.catalogObjectId,
         itemType: item.itemType,
       }));
-
       try {
         const response = await axios.post(GET_PAYMENT_LINK, {
           description: "hedsWORLD checkout",
-          idempotencyKey: '',
+          idempotencyKey: "",
           checkoutOptions: {
             askForShippingAddress: true,
           },
@@ -81,7 +80,6 @@ export const cartModel = createModel<RootModel>()({
             lineItems,
           },
         });
-        console.log(response.data.paymentLink.url);
         this.clearCart();
         this.setPaymentUrl(response.data.paymentLink.url);
       } catch (error) {
