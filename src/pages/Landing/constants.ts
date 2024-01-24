@@ -1,0 +1,11 @@
+export const text1 = `shop`;
+export const text2 = `events`;
+export const text3 = `listen`;
+export const text4 = `vote`;
+export const videoHTML = "video";
+export const aHTML = "a";
+export const shopURL = "/shop";
+export const eventsURL = "https://heds.space";
+export const listenURL = "https://heds.app";
+export const voteURL = "https://heds.vote";
+export const target = "_blank";

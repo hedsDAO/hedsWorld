@@ -1,22 +1,55 @@
-import LandingVideoAnimation from "@/pages/Landing/components/LandingVideoAnimation/LandingVideoAnimation";
-import { Dispatch, store } from "@/store/store";
-import { Stack } from "@chakra-ui/react";
-import { useDispatch, useSelector } from "react-redux";
-import LandingPageLinks from "./components/LandingPageLinks/LandingPageLinks";
-import { useEffect } from "react";
+import IMAGES from "@/images";
+import { Link } from "react-router-dom";
+import { Box, Button, Flex, Image, Stack } from "@chakra-ui/react";
+import * as constants from "@/pages/Landing/constants";
+import * as styles from "@/pages/Landing/styles";
+
+/**
+ * @name Landing
+ * @description
+ * @returns {JSX.Element} Landing component.
+ */
 
 const Landing = () => {
-  const dispatch = useDispatch<Dispatch>();
-  const isFirstLanding = useSelector(store.select.landingModel.selectIsFirstLanding);
-  useEffect(() => {
-    if (isFirstLanding) dispatch.landingModel.handleLanding();
-  }, []);
   return (
-    <Stack gap={0}>
-      <LandingVideoAnimation isFirstLanding={isFirstLanding} />
-      <LandingPageLinks />
+    <Stack {...styles.$stackStyle0}>
+      <Flex {...styles.$flexStyle1}>
+        <Button as={Link} to={constants.shopURL} {...styles.$buttonStyle2}>
+          {constants.text1}
+        </Button>
+        <Button as={constants.aHTML} target={constants.target} href={constants.eventsURL} {...styles.$buttonStyle3}>
+          {constants.text2}
+        </Button>
+      </Flex>
+      <Stack {...styles.$stackStyle4}>
+        <Image src={IMAGES.logo} {...styles.$imageStyle5} />
+        <Box {...styles.$boxStyle6}>
+          <Box style={{ ...styles.$videoStyles }} as={constants.videoHTML} playsInline autoPlay muted src={IMAGES.store} />
+        </Box>
+        <Stack {...styles.$stackButtonStyles}>
+          <Button as={Link} to={constants.shopURL} {...styles.$buttonStyle2}>
+            {constants.text1}
+          </Button>
+          <Button as={constants.aHTML} target={constants.target} href={constants.eventsURL} {...styles.$buttonStyle3}>
+            {constants.text2}
+          </Button>
+          <Button as={constants.aHTML} target={constants.target} href={constants.listenURL} {...styles.$buttonStyle8}>
+            {constants.text3}
+          </Button>
+          <Button as={constants.aHTML} target={constants.target} href={constants.voteURL} {...styles.$buttonStyle9}>
+            {constants.text4}
+          </Button>
+        </Stack>
+      </Stack>
+      <Flex {...styles.$flexStyle7}>
+        <Button as={constants.aHTML} target={constants.target} href={constants.listenURL} {...styles.$buttonStyle8}>
+          {constants.text3}
+        </Button>
+        <Button as={constants.aHTML} target={constants.target} href={constants.voteURL} {...styles.$buttonStyle9}>
+          {constants.text4}
+        </Button>
+      </Flex>
     </Stack>
   );
 };
-
 export default Landing;
