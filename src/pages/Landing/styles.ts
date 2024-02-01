@@ -3,8 +3,11 @@ import { StackProps, FlexProps, ButtonProps, ImageProps, BoxProps } from "@chakr
 export const $videoStyles: any = {
   objectFit: "cover",
   height: "100vh",
-  width: "100vw",
-  aspectRatio: 1,
+  overflow: "hidden",
+  maxW: "100vw",
+  minWidth: "100%",
+  zIndex: 999,
+  position: "absolute",
 };
 
 export const $stackStyle0: StackProps = {
@@ -12,8 +15,8 @@ export const $stackStyle0: StackProps = {
   minW: "100vw",
   maxH: "100vh",
   maxW: "100vw",
-  bg: "white",
   overflowY: "hidden",
+  overflowX: "hidden",
   alignItems: "center",
   gap: 0,
 };
@@ -30,8 +33,9 @@ export const $flexStyle1: FlexProps = {
 export const $buttonStyle2: ButtonProps = {
   rounded: "none",
   fontWeight: "medium",
-  bg: "black",
-  color: "white",
+  bg: "white",
+  color: "black",
+  border: "1px solid black",
   shadow: "sm",
   size: { base: "md", lg: "sm" },
   minW: "14ch !important",
@@ -44,8 +48,9 @@ export const $buttonStyle2: ButtonProps = {
 export const $buttonStyle3: ButtonProps = {
   rounded: "none",
   fontWeight: "medium",
-  bg: "black",
-  color: "white",
+  bg: "white",
+  color: "black",
+  border: "1px solid black",
   shadow: "sm",
   size: { base: "md", lg: "sm" },
   minW: "14ch !important",
@@ -58,8 +63,9 @@ export const $buttonStyle3: ButtonProps = {
 export const $buttonStyle8: ButtonProps = {
   rounded: "none",
   fontWeight: "medium",
-  bg: "black",
-  color: "white",
+  bg: "white",
+  color: "black",
+  border: "1px solid black",
   shadow: "sm",
   size: { base: "md", lg: "sm" },
   minW: "14ch !important",
@@ -72,8 +78,9 @@ export const $buttonStyle8: ButtonProps = {
 export const $buttonStyle9: ButtonProps = {
   rounded: "none",
   fontWeight: "medium",
-  bg: "black",
-  color: "white",
+  bg: "white",
+  color: "black",
+  border: "1px solid black",
   shadow: "sm",
   size: { base: "md", lg: "sm" },
   minW: "14ch !important",
@@ -87,13 +94,15 @@ export const $stackStyle4: StackProps = {
   gap: 7,
   alignItems: "center",
   minW: "100vw",
+  minH: '100vh',
+  maxH: "100vh",
 };
 
 export const $imageStyle5: ImageProps = {
   zIndex: 20,
-  marginTop: { base: 10, lg: 10 },
-  position: "absolute",
-  maxH: "6rem",
+  // marginTop: { base: 10, lg: 10 },
+  // position: "absolute",
+  maxH: "1.5rem",
   objectFit: "contain",
   transition: "all 0.5s ease-in-out",
   _hover: {
@@ -102,8 +111,8 @@ export const $imageStyle5: ImageProps = {
 };
 
 export const $boxStyle6: BoxProps = {
-  zIndex: 10,
-  position: "absolute",
+
+
 };
 
 export const $flexStyle7: FlexProps = {

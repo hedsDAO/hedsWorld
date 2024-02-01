@@ -13,17 +13,23 @@ import "@fontsource/space-mono";
 import "@fontsource/inter";
 import "@fontsource/poppins";
 import "@fontsource/karla";
+import "@fontsource-variable/domine";
+import { Global } from "@emotion/react";
+import { HELVETICA_STYLE } from "@/store/constants";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <RematchProvider store={store}>
-        <ChakraWrapper>
-          <App />
-        </ChakraWrapper>
-      </RematchProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+  <>
+    <Global styles={HELVETICA_STYLE} />
+    <React.StrictMode>
+      <BrowserRouter>
+        <RematchProvider store={store}>
+          <ChakraWrapper>
+            <App />
+          </ChakraWrapper>
+        </RematchProvider>
+      </BrowserRouter>
+    </React.StrictMode>
+  </>
 );

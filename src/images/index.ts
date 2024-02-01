@@ -9,7 +9,9 @@ const IMAGES = {
   promo: new URL("../../public/videos/promo.mp4", import.meta.url).href,
   screen: new URL("../../public/images/screen.png", import.meta.url).href,
   logo: new URL("../../public/images/logo.webp", import.meta.url).href,
-  store: new URL("../../public/videos/store.mov", import.meta.url).href,
+  shirts: new URL("../../public/videos/shirts.mov", import.meta.url).href,
+  shirts_2: new URL("../../public/videos/shirt-2.mp4", import.meta.url).href,
+  hedline_w_i: new URL("../../public/images/hedline_w_i.png", import.meta.url).href,
 };
 
 export default IMAGES;

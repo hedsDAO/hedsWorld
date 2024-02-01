@@ -12,7 +12,7 @@ const FeaturedProductGallery = () => {
       <Stack maxH="80vh" minW="full " px={{ base: 4, lg: 2 }} py={{ base: 8, lg: 0 }}>
         <Skeleton minW="full" startColor="blackAlpha.300" endColor="blackAlpha.100" isLoaded={hasImageLoaded}>
           <Collapse transition={{ enter: { delay: 5 } }} in={hasImageLoaded}>
-            <video autoPlay playsInline onLoad={() => setHasImageLoaded.on()} style={{ objectFit: "contain" }} src={IMAGES.promo} />
+            <video autoPlay playsInline onLoad={() => setHasImageLoaded.on()} style={{ objectFit: "contain" }} src={IMAGES.globe} />
           </Collapse>
         </Skeleton>
       </Stack>

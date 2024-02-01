@@ -15,6 +15,8 @@ export const defaultTheme = extendTheme({
     poppins: "'Poppins', sans-serif",
     open: "'Open Sans Variable', sans-serif",
     lora: "'Lora Variable', serif",
+    domine: "'Domine Variable', sans-serif",
+
   },
   styles: {
     global: (props: any) => ({
@@ -22,6 +24,7 @@ export const defaultTheme = extendTheme({
         height: "100%",
         minHeight: "100vh",
         minWidth: "100vw",
+        overflowX: "hidden",
         overscrollBehavior: "none !important",
       },
       '.chakra-input[type="search"]::-webkit-search-cancel-button': {
