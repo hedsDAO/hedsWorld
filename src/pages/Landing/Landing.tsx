@@ -67,7 +67,7 @@ const Landing = () => {
       </Fade>
       <Flex mixBlendMode={"difference"} alignSelf={"start"} py={2.5} pl={{ lg: 5 }} alignItems={"center"} gap={6} minW="100vw" zIndex={1000} justifyContent={{ base: "center", lg: "start" }}>
         <Fade transition={{ enter: { delay: 0.1, duration: 0.75 }, exit: { delay: 0.75, duration: 0.75 } }} in={true && !isUnloading}>
-          <Text onClick={() => handleUnload()} fontWeight={"semibold"} fontSize={"sm"} fontFamily={"karla"} color="whiteAlpha.900">
+          <Text cursor={"pointer"} pointerEvents={"auto"} onClick={() => handleUnload()} fontWeight={"semibold"} fontSize={"sm"} fontFamily={"karla"} color="whiteAlpha.900">
             shop
           </Text>
         </Fade>
