@@ -49,6 +49,7 @@ export const cartModel = createModel<RootModel>()({
       updatedCart.splice(index, 1);
       return { ...state, cart: updatedCart };
     },
+    clearPaymentUrl: (state: CartModelState) => ({ ...state, paymentUrl: null }),
     clearCart: (state: CartModelState) => ({ ...state, cart: null }),
     clearState: () => ({ cart: null, paymentUrl: null, isDrawerOpen: false, isRedirecting: false }),
   },

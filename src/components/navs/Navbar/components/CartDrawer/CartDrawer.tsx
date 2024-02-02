@@ -6,8 +6,10 @@ import { NumberInput, Button, Flex, Image, Stack, Text } from "@chakra-ui/react"
 import { Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const CartDrawer = () => {
+  const navigate = useNavigate();
   const tempRef = useRef(null);
   const dispatch = useDispatch<Dispatch>();
   const isDrawerOpen = useSelector(store.select.cartModel.selectIsDrawerOpen);
@@ -17,6 +19,15 @@ const CartDrawer = () => {
   const handleQuantiyChange = (e: string, index: number) => {
     dispatch.cartModel.updateCartItem({ index, quantity: e });
   };
+
+  useEffect(() => {
+    if (paymentUrl?.length) {
+      navigate("/redirect", { state: { redirect: paymentUrl } });
+    }
+    return () => {
+      if (paymentUrl?.length) dispatch.cartModel.clearPaymentUrl();
+    };
+  }, [paymentUrl]);
 
   return (
     <Drawer trapFocus={false} size={{ base: "100%", lg: "md" }} isOpen={isDrawerOpen} placement="right" initialFocusRef={tempRef} onClose={() => dispatch.cartModel.setIsDrawerOpen(false)}>

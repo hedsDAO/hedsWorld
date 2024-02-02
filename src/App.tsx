@@ -4,6 +4,7 @@ import LayoutWrapper from "@/components/wrappers/LayoutWrapper";
 import Product from "@/pages/Product/Product";
 import Landing from "@/pages/Landing/Landing";
 import About from "@/pages/About/About";
+import Redirecting from "@/pages/Redirecting/Redirecting";
 
 import firebaseConfig from "@/firebase";
 import { initializeApp } from "firebase/app";
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="/shop" element={<Shop />} />
         <Route path="/product/:id" element={<Product />} />
         <Route path="/about" element={<About />} />
+        <Route path="/redirect" element={<Redirecting />} />
       </Route>
     </Routes>
   );
