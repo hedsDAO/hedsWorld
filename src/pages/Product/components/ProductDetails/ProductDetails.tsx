@@ -10,7 +10,7 @@ const ProductDetails = () => {
       <AccordionItem py={2.5} borderColor="blackAlpha.600" mt={1}>
         <AccordionButton px={0} bg={"transparent"} _hover={{ bg: "white", color: "black" }} _active={{ bg: "white", color: "black" }} _focus={{ bg: "white", color: "black" }} color={"black"}>
           <Text px={1.5} fontSize="xs" fontFamily={"Helvetica"} as="span" flex="1" textAlign="left">
-            Product Details
+            product details
           </Text>
           <AccordionIcon />
         </AccordionButton>
@@ -34,7 +34,7 @@ const ProductDetails = () => {
       <AccordionItem py={2.5} borderColor="blackAlpha.600" mt={1}>
         <AccordionButton px={0} bg={"transparent"} _hover={{ bg: "white", color: "black" }} _active={{ bg: "white", color: "black" }} _focus={{ bg: "white", color: "black" }} color={"black"}>
           <Text px={1.5} fontSize="xs" fontFamily={"Helvetica"} as="span" flex="1" textAlign="left">
-            Fabric and Care
+            fabric and care
           </Text>
           <AccordionIcon />
         </AccordionButton>
@@ -60,12 +60,12 @@ const ProductDetails = () => {
       <AccordionItem py={2.5} borderColor="blackAlpha.600" mt={1}>
         <AccordionButton px={0} bg={"transparent"} _hover={{ bg: "white", color: "black" }} _active={{ bg: "white", color: "black" }} _focus={{ bg: "white", color: "black" }} color={"black"}>
           <Text px={1.5} fontSize="xs" fontFamily={"Helvetica"} as="span" flex="1" textAlign="left">
-            Shipping and Returns
+            shipping and returns
           </Text>
           <AccordionIcon />
         </AccordionButton>
         <AccordionPanel px={2} pb={4}>
-          <Stack gap={2}>
+          <Stack gap={3}>
             {product?.customAttributeValues &&
               Object.values(product?.customAttributeValues)?.map((attribute) => {
                 if (attribute.name === "shipping" || attribute.name === "returns")

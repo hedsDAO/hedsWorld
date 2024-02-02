@@ -1,5 +1,5 @@
 import { Dispatch, store } from "@/store/store";
-import { formatPrice, returnVariationSize } from "@/store/utils";
+import { formatPrice, isItemSoldOut, returnVariationSize } from "@/store/utils";
 import { Box, Button, Collapse, Flex, GridItem, Image, SimpleGrid, Stack, Text, SlideFade, Fade, useBoolean } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -127,7 +127,7 @@ const Product = () => {
             <Text mt={"-0.5px !important"} letterSpacing={"wide"} fontFamily={"Helvetica"} color="blackAlpha.800" fontSize="sm">
               {formatPrice(product?.itemData?.variations?.[0]?.itemVariationData?.priceMoney?.amount)}
             </Text>
-            <Text lineHeight={1.35} pt={8} maxW={{ lg: "60%" }} fontFamily={"space"} fontSize="xs" textColor={"blackAlpha.700"}>
+            <Text lineHeight={1.35} pt={8} maxW={{ lg: "75%" }} fontFamily={"space"} fontSize="xs" textColor={"blackAlpha.700"}>
               {product?.itemData?.description}
             </Text>
             {
@@ -140,27 +140,31 @@ const Product = () => {
             }
             <Stack justifyContent={"center"} px={0}>
               <SimpleGrid inset={-1} columns={4}>
-                {product?.itemData?.variations?.map((variation) => (
-                  <Button
-                    as={GridItem}
-                    colSpan={1}
-                    key={variation?.id}
-                    onClick={() => {
-                      dispatch.productModel?.setSelectedVariant(variation?.id);
-                    }}
-                    textTransform={"uppercase"}
-                    borderRight="1px"
-                    borderColor="black"
-                    bg={variation?.id === selectedVariant ? "black" : "white"}
-                    color={variation?.id === selectedVariant ? "white" : "black"}
-                    _hover={{ bg: "blackAlpha.900", color: "white" }}
-                    size="xs"
-                    rounded="none"
-                    fontWeight={"normal"}
-                  >
-                    {returnVariationSize(variation.itemVariationData?.name)}
-                  </Button>
-                ))}
+                {product?.itemData?.variations?.map((variation) => {
+                  console.log(isItemSoldOut(product, selectedVariant));
+                  return (
+                    <Button
+                      as={GridItem}
+                      colSpan={1}
+                      key={variation?.id}
+                      onClick={() => {
+                        dispatch.productModel?.setSelectedVariant(variation?.id);
+                      }}
+       
+                      isDisabled={isItemSoldOut(product, variation?.id)}
+                      borderRight={isItemSoldOut(product, variation?.id) ? "0px" : "1px"}
+                      borderColor="black"
+                      bg={variation?.id === selectedVariant ? "black" : "white"}
+                      color={variation?.id === selectedVariant ? "white" : "black"}
+                      _hover={{ bg: "blackAlpha.900", color: "white" }}
+                      size="xs"
+                      rounded="none"
+                      fontWeight={"normal"}
+                    >
+                      {returnVariationSize(variation.itemVariationData?.name).toLowerCase()}
+                    </Button>
+                  );
+                })}
               </SimpleGrid>
               <Collapse in={!!selectedVariant}>
                 <Stack mb={8} mt={5}>
@@ -179,6 +183,7 @@ const Product = () => {
                         image: product?.productImages?.[0] || "",
                       });
                     }}
+                    isDisabled={isItemSoldOut(product, selectedVariant)}
                     size="xs"
                     fontWeight={"normal"}
                     rounded="none"
@@ -186,7 +191,9 @@ const Product = () => {
                     bg={isClicked ? "white" : "black"}
                     _hover={{ background: "black" }}
                   >
-                    {isClicked ? (
+                    {isItemSoldOut(product, selectedVariant) ? (
+                      "sold out"
+                    ) : isClicked ? (
                       <Fade transition={{ enter: { delay: 0, duration: 0.5 }, exit: { delay: 0, duration: 0.25 } }} in={isClicked}>
                         <Box h="80px" w="80px">
                           <AddedAnimation />

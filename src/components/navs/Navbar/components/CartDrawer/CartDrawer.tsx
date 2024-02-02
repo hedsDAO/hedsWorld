@@ -20,20 +20,11 @@ const CartDrawer = () => {
     dispatch.cartModel.updateCartItem({ index, quantity: e });
   };
 
-  useEffect(() => {
-    if (paymentUrl?.length) {
-      navigate("/redirect", { state: { redirect: paymentUrl } });
-    }
-    return () => {
-      if (paymentUrl?.length) dispatch.cartModel.clearPaymentUrl();
-    };
-  }, [paymentUrl]);
-
   return (
     <Drawer trapFocus={false} size={{ base: "100%", lg: "md" }} isOpen={isDrawerOpen} placement="right" initialFocusRef={tempRef} onClose={() => dispatch.cartModel.setIsDrawerOpen(false)}>
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerHeader>Cart</DrawerHeader>
+        <DrawerHeader>cart</DrawerHeader>
         <DrawerBody as={Stack}>
           {cart?.length ? (
             cart?.map((item, index) => {
@@ -118,11 +109,14 @@ const CartDrawer = () => {
                 mr={2}
                 onClick={() => dispatch.cartModel.setIsDrawerOpen(false)}
               >
-                Cancel
+                cancel
               </Button>
               <Button
                 onClick={() => {
-                  if (cart) dispatch.cartModel.createPaymentLink(cart);
+                  if (cart) {
+                    dispatch.cartModel.createPaymentLink(cart);
+                    navigate("/redirect");
+                  }
                 }}
                 isDisabled={cart?.length === 0 || !cart}
                 color="white"
@@ -131,7 +125,7 @@ const CartDrawer = () => {
                 bg="black"
                 _hover={{ background: "blackAlpha.700" }}
               >
-                Checkout
+                checkout
               </Button>
             </Flex>
           </Stack>

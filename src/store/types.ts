@@ -61,6 +61,7 @@ export interface ItemOptionValue {
 export interface LocationOverride {
   locationId: string;
   trackInventory: boolean;
+  soldOut?: boolean
 }
 
 export interface PriceMoney {

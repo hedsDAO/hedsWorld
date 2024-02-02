@@ -1,8 +1,9 @@
 import { CartItem } from "@/models/cart";
+import { CatalogItem, ItemVariationData } from "./types";
 
 export const formatPrice = (price?: number): string => {
   if (!price) return "";
-  return `$${(price / 100)}`;
+  return `$${price / 100}`;
 };
 
 export const returnVariationSize = (variationName?: string): string => {
@@ -27,4 +28,12 @@ export const calculateTotalCost = (cart: CartItem[]) => {
   if (remainderInCents === 2) return `$${totalPrice}`;
   else if (remainderInCents === 1) return `$${totalPrice.toString()}0`;
   else return `$${totalPrice}.00`;
+};
+
+export const isItemSoldOut = (item: any, variation: any) => {
+  let variations = item?.itemData?.variations;
+  let itemData = variations?.find((v: any) => v.id === variation);
+  console.log(itemData?.itemVariationData?.locationOverrides?.[0]?.soldOut)
+  if (itemData?.itemVariationData?.locationOverrides?.[0]?.soldOut) return true;
+  else return false;
 };
