@@ -202,13 +202,14 @@ const Product = () => {
                     rounded="none"
                     color="white"
                     bg={isClicked ? "white" : "black"}
-                    _hover={{ background: "black" }}
+                    _hover={{ background: isClicked ? "white" : "black" }}
+                    _focus={{ background: isClicked ? "white" : "black" }}
                   >
                     {isItemSoldOut(product, selectedVariant) ? (
                       "sold out"
                     ) : isClicked ? (
-                      <Fade transition={{ enter: { delay: 0, duration: 0.5 }, exit: { delay: 0, duration: 0.25 } }} in={isClicked}>
-                        <Box h="80px" w="80px">
+                      <Fade transition={{ enter: { delay: 0, duration: 0.5 }, exit: { delay: 0, duration: 0.15 } }} in={isClicked}>
+                        <Box h={{ base: "100px", lg: "80px" }} w={{ base: "100px", lg: "80px" }}>
                           <AddedAnimation />
                         </Box>
                       </Fade>
