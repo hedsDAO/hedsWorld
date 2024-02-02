@@ -7,7 +7,7 @@ const About = () => {
   return (
     <Stack justifyContent={"center"} alignItems={"center"} minW="100vw" minH="80vh">
       <Fade transition={{ enter: { delay: 0.5, duration: 0.5 }, exit: { delay: 0.5, duration: 0.75 } }} in={true && !isUnloading}>
-        <Text fontFamily={"Helvetica"} fontSize="7xl" color="blackAlpha.600">
+        <Text fontFamily={"Helvetica"} fontSize={{ base: "4xl", lg: "7xl" }} color="blackAlpha.600">
           what is heds.world?
         </Text>
       </Fade>

@@ -12,7 +12,7 @@ const Footer = () => {
 
   return (
     <SlideFade transition={{ enter: { delay: 1, duration: 0.25 }, exit: { delay: 0.25, duration: 0.25 } }} in={true && !isUnloading}>
-      <Flex alignItems={"center"} justifyContent={"space-between"} pb={{ base: 16, lg: 5 }} pt={{ base: 10, lg: 20 }} minH="8vh" maxW="100vw" px={{base: 3, lg:5}}>
+      <Flex alignItems={"center"} justifyContent={"space-between"} pb={{ base: 20, lg: 5 }} pt={{ base: 10, lg: 20 }} minH="8vh" maxW="100vw" px={{ base: 3, lg: 5 }}>
         <Flex alignItems={"center"} gap={5}>
           <Image ml={2} src={IMAGES.hedline_w_i} boxSize={{ base: "2rem", lg: "2.5rem" }} />
           <Stack gap={0}>
