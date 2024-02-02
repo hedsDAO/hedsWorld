@@ -1,6 +1,6 @@
 import type { RootModel } from "@/store";
 
-import { GET_ALL_CATALOG_ITEMS_API_ENDPOINT } from "@/store/api";
+import { GET_ALL_CATALOG_ITEMS_API_ENDPOINT, getProductImages } from "@/store/api";
 import { CatalogItem } from "@/store/types";
 import { createModel } from "@rematch/core";
 import axios from "axios";
@@ -34,7 +34,16 @@ export const landingModel = createModel<RootModel>()({
     async getProducts() {
       try {
         const response = await axios.get(GET_ALL_CATALOG_ITEMS_API_ENDPOINT);
-        if (response.data) this.setAllProducts(response.data);
+        if (response.data) {
+          let updateProductsWithImages: any[] = [];
+          for (let i = 0; i < response.data.length; i++) {
+            const id = response.data[i]?.id;
+            const images = await getProductImages(id);
+            response.data[i].productImages = images;
+            updateProductsWithImages.push({...response.data[i], productImages: images});
+          }
+          this.setAllProducts(updateProductsWithImages?.slice(0, 1));
+        }
         if (response.data && response.data.length > 0) this.setFeaturedProduct(response.data[0]);
       } catch (error) {
         console.log(error);

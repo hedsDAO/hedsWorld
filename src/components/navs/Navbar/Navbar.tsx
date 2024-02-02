@@ -13,22 +13,11 @@ const Navbar = () => {
   const { pathname } = useLocation();
   const dispatch = useDispatch<Dispatch>();
   const navigate = useNavigate();
-  const [isUnloading, setIsUnloading] = useBoolean();
+  const isUnloading = useSelector(store.select.globalModel.selectIsUnloading);
   const isDrawerOpen = useSelector(store.select.cartModel.selectIsDrawerOpen);
   const isFirstLanding = useSelector(store.select.landingModel.selectIsFirstLanding);
   const isRedirecting = useSelector(store.select.cartModel.selectIsRedirecting);
   const cart = useSelector(store.select.cartModel.selectCart);
-
-  const handleUnload = () => {
-    if (isUnloading) return;
-    else {
-      setIsUnloading.on();
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
-    }
-    return;
-  };
 
   const getTotalQuantity = () => {
     if (!cart) return 0;
@@ -43,16 +32,22 @@ const Navbar = () => {
 
   return (
     <Flex gap={{ base: 4, lg: 6 }} alignItems={"center"} minW="100vw" py={"7.5px"} pl={4}>
-      <Image pointerEvents={"auto"} cursor={"pointer"} onClick={() => handleUnload()} objectFit={"contain"} boxSize={{ base: "1.5rem", lg: "1.9rem" }} src={IMAGES.logo} />
+      <Image
+        pointerEvents={"auto"}
+        cursor={"pointer"}
+        onClick={() => dispatch.globalModel.handleUnload([isUnloading, () => navigate("/")])}
+        objectFit={"contain"}
+        boxSize={{ base: "1.5rem", lg: "1.9rem" }}
+        src={IMAGES.logo}
+      />
       {constants.NavLinks?.map((navLink: constants.NavLink, index: number) => {
         const active = pathname === navLink.path;
         if (navLink.external)
           return (
-            <Fade style={{ display: "flex" }} in={true && !isUnloading} transition={{ enter: { delay: (index + 1) / 10 }, exit: { delay: (index + 1) / 10 } }}>
+            <Fade key={navLink.id} style={{ display: "flex" }} in={true && !isUnloading} transition={{ enter: { delay: (index + 1) / 10 }, exit: { delay: (index + 1) / 10 } }}>
               <Text
                 _hover={{ color: "blackAlpha.900" }}
                 transition={"0.25s all ease-in-out"}
-                key={navLink.id}
                 as={"a"}
                 href={navLink.path}
                 target={"_blank"}
@@ -67,13 +62,13 @@ const Navbar = () => {
           );
         else
           return (
-            <Fade style={{ display: "flex" }} in={true && !isUnloading} transition={{ enter: { delay: (index + 1) / 10 }, exit: { delay: (index + 1) / 10 } }}>
+            <Fade key={navLink.id} style={{ display: "flex" }} in={true && !isUnloading} transition={{ enter: { delay: (index + 1) / 10 }, exit: { delay: (index + 1) / 10 } }}>
               <Text
                 _hover={{ color: "blackAlpha.900" }}
                 transition={"0.25s all ease-in-out"}
-                as={Link}
-                to={navLink.path}
-                key={navLink.id}
+                cursor={"pointer"}
+                pointerEvents={"auto"}
+                onClick={() => dispatch.globalModel.handleUnload([isUnloading, () => navigate(navLink.path)])}
                 fontWeight={"semibold"}
                 fontSize={{ base: "xs", lg: "sm" }}
                 fontFamily={"karla"}

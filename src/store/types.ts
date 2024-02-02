@@ -27,6 +27,7 @@ export interface CatalogItem {
       name: string;
       customAttributeDefinitionId: string;
       type: string;
+      stringValue?: string;
       numberValue: number;
       key: string;
     };

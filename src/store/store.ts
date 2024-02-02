@@ -8,8 +8,8 @@ const persistConfig = {
   key: "root",
   storage,
   version: 2,
-  blacklist: ["productModel"],
-  whitelist: ["cartModel", "landingModel"],
+  blacklist: ["productModel", "landingModel"],
+  whitelist: ["cartModel"],
 };
 
 export const store = init<RootModel>({

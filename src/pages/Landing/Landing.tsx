@@ -1,10 +1,10 @@
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Dispatch, store } from "@/store/store";
+import { Box, Fade, Flex, Stack, Text } from "@chakra-ui/react";
 import IMAGES from "@/images";
-import { Link, useNavigate } from "react-router-dom";
-import { Box, Button, Fade, Flex, Image, Skeleton, Stack, Text, useBoolean } from "@chakra-ui/react";
 import * as constants from "@/pages/Landing/constants";
 import * as styles from "@/pages/Landing/styles";
-import { useEffect } from "react";
-import { motion } from "framer-motion";
 
 /**
  * @name Landing
@@ -13,32 +13,9 @@ import { motion } from "framer-motion";
  */
 
 const Landing = () => {
+  const dispatch = useDispatch<Dispatch>();
+  const isUnloading = useSelector(store.select.globalModel.selectIsUnloading);
   const navigate = useNavigate();
-  const [hasVideoLoaded, setHasVideoLoaded] = useBoolean();
-  const [isUnloading, setIsUnloading] = useBoolean();
-  const [isTitleIn, setIsTitleIn] = useBoolean();
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsTitleIn.on();
-    }, 1000);
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, []);
-
-  const handleUnload = () => {
-    if (isUnloading) return;
-    else {
-      setIsUnloading.on();
-      setHasVideoLoaded.off();
-      setTimeout(() => {
-        navigate(constants.shopURL);
-      }, 2000);
-    }
-
-    return;
-  };
 
   return (
     <Stack {...styles.$stackStyle0}>
@@ -53,21 +30,29 @@ const Landing = () => {
             bottom: 0,
             background: "linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%)",
           }}
-          onClick={() => handleUnload()}
+          onClick={() => dispatch.globalModel.handleUnload([isUnloading, () => navigate(constants.shopURL)])}
           mt={{ base: 12, lg: 0 }}
           style={{ ...styles.$videoStyles }}
           as={constants.videoHTML}
           loop
           playsInline
           autoPlay
-          onPlay={setHasVideoLoaded.on}
           muted
           src={IMAGES.shirts_2}
         />
       </Fade>
       <Flex mixBlendMode={"difference"} alignSelf={"start"} py={2.5} pl={{ lg: 5 }} alignItems={"center"} gap={6} minW="100vw" zIndex={1000} justifyContent={{ base: "center", lg: "start" }}>
         <Fade transition={{ enter: { delay: 0.1, duration: 0.75 }, exit: { delay: 0.75, duration: 0.75 } }} in={true && !isUnloading}>
-          <Text cursor={"pointer"} pointerEvents={"auto"} onClick={() => handleUnload()} fontWeight={"semibold"} fontSize={"sm"} fontFamily={"karla"} color="whiteAlpha.900">
+          <Text
+            mb={"-2px"}
+            cursor={"pointer"}
+            pointerEvents={"auto"}
+            onClick={() => dispatch.globalModel.handleUnload([isUnloading, () => navigate(constants.shopURL)])}
+            fontWeight={"semibold"}
+            fontSize={"sm"}
+            fontFamily={"karla"}
+            color="whiteAlpha.900"
+          >
             shop
           </Text>
         </Fade>
@@ -87,7 +72,17 @@ const Landing = () => {
           </Text>
         </Fade>
       </Flex>
-      <Flex onClick={() => handleUnload()} mixBlendMode={"difference"} mt={{ base: "15%", lg: "15%" }} alignSelf={"center"} justifyContent={"center"} px={6} py={1} minW="100vw" zIndex={1000}>
+      <Flex
+        onClick={() => dispatch.globalModel.handleUnload([isUnloading, () => navigate(constants.teeURL)])}
+        mixBlendMode={"difference"}
+        mt={{ base: "15%", lg: "15%" }}
+        alignSelf={"center"}
+        justifyContent={"center"}
+        px={6}
+        py={1}
+        minW="100vw"
+        zIndex={1000}
+      >
         <Fade transition={{ enter: { delay: 1.75, duration: 1 }, exit: { delay: 0, duration: 0.5 } }} in={true && !isUnloading}>
           <Text
             lineHeight={0.95}

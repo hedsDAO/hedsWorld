@@ -2,7 +2,7 @@ import { CartItem } from "@/models/cart";
 
 export const formatPrice = (price?: number): string => {
   if (!price) return "";
-  return `$${(price / 100).toFixed(2)}`;
+  return `$${(price / 100)}`;
 };
 
 export const returnVariationSize = (variationName?: string): string => {

@@ -19,14 +19,7 @@ const CartDrawer = () => {
   };
 
   return (
-    <Drawer
-      trapFocus={false}
-      size={{ base: "100%", lg: "md" }}
-      isOpen={isDrawerOpen}
-      placement="right"
-      initialFocusRef={tempRef}
-      onClose={() => dispatch.cartModel.setIsDrawerOpen(false)}
-    >
+    <Drawer trapFocus={false} size={{ base: "100%", lg: "md" }} isOpen={isDrawerOpen} placement="right" initialFocusRef={tempRef} onClose={() => dispatch.cartModel.setIsDrawerOpen(false)}>
       <DrawerOverlay />
       <DrawerContent>
         <DrawerHeader>Cart</DrawerHeader>
@@ -39,13 +32,13 @@ const CartDrawer = () => {
                   <Stack>
                     <Flex alignItems={"end"} gap={1.5}>
                       {item?.size ? (
-                        <Text fontSize={{base: 'xs', lg:"lg"}} fontWeight={"medium"}>
-                          {(item?.size?.slice(0, 3)).toUpperCase()} /
+                        <Text fontSize={{ base: "xs", lg: "lg" }} fontWeight={"medium"}>
+                          {item?.size?.slice(0, 3).toUpperCase()} /
                         </Text>
                       ) : (
                         ""
                       )}
-                      <Text fontSize={{base: 'xs', lg:"lg"}} fontWeight={"medium"}>
+                      <Text fontSize={{ base: "xs", lg: "lg" }} fontWeight={"medium"}>
                         {item?.name}
                       </Text>
                     </Flex>
@@ -72,31 +65,12 @@ const CartDrawer = () => {
                       borderColor={"transparent"}
                       rounded="none"
                     />
-                    <NumberInputStepper
-                      _disabled={{ borderColor: "transparent", color: "transparent" }}
-                      _focusVisible={{ borderColor: "transparent" }}
-                      borderColor={"transparent"}
-                      rounded="none"
-                    >
-                      <NumberIncrementStepper
-                        _disabled={{ borderColor: "transparent", color: "blackAlpha.500" }}
-                        borderColor={"transparent"}
-                      />
-                      <NumberDecrementStepper
-                        _disabled={{ borderColor: "transparent", color: "blackAlpha.500" }}
-                        borderColor={"transparent"}
-                      />
+                    <NumberInputStepper _disabled={{ borderColor: "transparent", color: "transparent" }} _focusVisible={{ borderColor: "transparent" }} borderColor={"transparent"} rounded="none">
+                      <NumberIncrementStepper _disabled={{ borderColor: "transparent", color: "blackAlpha.500" }} borderColor={"transparent"} />
+                      <NumberDecrementStepper _disabled={{ borderColor: "transparent", color: "blackAlpha.500" }} borderColor={"transparent"} />
                     </NumberInputStepper>
                   </NumberInput>
-                  <Text
-                    mr={3}
-                    fontSize="sm"
-                    color="blackAlpha.700"
-                    _hover={{ color: "black" }}
-                    as="i"
-                    onClick={() => dispatch.cartModel.removeCartItem(index)}
-                    className="fas fa-trash"
-                  ></Text>
+                  <Text mr={3} fontSize="sm" color="blackAlpha.700" _hover={{ color: "black" }} as="i" onClick={() => dispatch.cartModel.removeCartItem(index)} className="fas fa-trash"></Text>
                 </Flex>
               );
             })
