@@ -1,6 +1,6 @@
 import { Dispatch, store } from "@/store/store";
 import { formatPrice, isItemSoldOut, returnVariationSize } from "@/store/utils";
-import { Box, Button, Collapse, Flex, GridItem, Image, SimpleGrid, Stack, Text, SlideFade, Fade, useBoolean } from "@chakra-ui/react";
+import { Box, Button, Collapse, Flex, GridItem, Image, SimpleGrid, Stack, Text, SlideFade, Fade, useBoolean, useBreakpointValue } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -8,10 +8,12 @@ import { storage } from "@/App";
 import { getDownloadURL, listAll, ref } from "firebase/storage";
 import ProductDetails from "./components/ProductDetails/ProductDetails";
 import AddedAnimation from "@/components/animations/Added/Added";
+import MobileCarousel from "./components/MobileCarousel/MobileCarousel";
 
 const Product = () => {
   const [previousImage, setPreviousImage] = useState<number>(0);
   const dispatch = useDispatch<Dispatch>();
+  const isMobile = useBreakpointValue({ base: true, lg: false });
   const [isClicked, setIsClicked] = useBoolean();
   const cart = useSelector(store.select.cartModel.selectCart);
   const isUnloading = useSelector(store.select.globalModel.selectIsUnloading);
@@ -55,7 +57,7 @@ const Product = () => {
   };
 
   return (
-    <Stack justifyContent={"start"} py={{ base: 6, lg: 24 }} maxW="5xl" mx="auto">
+    <Stack overflowX={"hidden"} justifyContent={"start"} py={{ base: 6, lg: 24 }} px={{ base: 2, lg: 0 }} maxW="5xl" mx="auto">
       <SimpleGrid alignItems={"stretch"} gap={{ base: 2, lg: 8 }} py={{ base: 0, lg: 0 }} px={{ base: 2, lg: 0.5 }} columns={9}>
         <GridItem colSpan={{ base: 9, lg: 5 }} gap={0.5} as={SimpleGrid} columns={{ base: 3, lg: 4 }}>
           {images?.map((url, index) => {
@@ -79,45 +81,51 @@ const Product = () => {
                 </GridItem>
               );
           })}
-          {images?.map((url, index: number) => {
-            return (
-              <GridItem
-                onMouseEnter={() => {
-                  if (selectedPhoto !== index) {
-                    if (selectedPhoto) {
-                      setPreviousImage(selectedPhoto);
+
+          {isMobile && images ? (
+            <MobileCarousel images={images} />
+          ) : (
+            images?.map((url, index: number) => {
+              return (
+                <GridItem
+                  display={{ base: "none", lg: "flex" }}
+                  onMouseEnter={() => {
+                    if (selectedPhoto !== index) {
+                      if (selectedPhoto) {
+                        setPreviousImage(selectedPhoto);
+                      }
+                      dispatch.productModel.setSelectedPhoto(index);
                     }
+                  }}
+                  onMouseLeave={() => {
+                    if (previousImage !== index) {
+                      dispatch.productModel.setSelectedPhoto(previousImage);
+                    }
+                  }}
+                  onClick={() => {
+                    setPreviousImage(index);
                     dispatch.productModel.setSelectedPhoto(index);
-                  }
-                }}
-                onMouseLeave={() => {
-                  if (previousImage !== index) {
-                    dispatch.productModel.setSelectedPhoto(previousImage);
-                  }
-                }}
-                onClick={() => {
-                  setPreviousImage(index);
-                  dispatch.productModel.setSelectedPhoto(index);
-                }}
-                colSpan={{ base: 3, lg: 1 }}
-              >
-                <Fade key={url} transition={{ enter: { delay: 0.75, duration: 1 }, exit: { delay: 0.5, duration: 0.75 } }} in={true && !isUnloading}>
-                  <Box mixBlendMode={"difference"} position={"relative"}>
-                    <Text
-                      fontFamily={"inter"}
-                      letterSpacing={"widest"}
-                      fontSize={{ base: "9px", lg: "2xs" }}
-                      textColor={"white"}
-                      mb={{ base: "-18px", lg: "-21px" }}
-                      pt={1.5}
-                      ml={{ base: 2, lg: 2.5 }}
-                    >{`[${index + 1} / ${images.length}]`}</Text>
-                  </Box>
-                  <Image aspectRatio={1} objectFit={"cover"} src={url} />
-                </Fade>
-              </GridItem>
-            );
-          })}
+                  }}
+                  colSpan={{ base: 3, lg: 1 }}
+                >
+                  <Fade key={url} transition={{ enter: { delay: 0.75, duration: 1 }, exit: { delay: 0.5, duration: 0.75 } }} in={true && !isUnloading}>
+                    <Box mixBlendMode={"difference"} position={"relative"}>
+                      <Text
+                        fontFamily={"inter"}
+                        letterSpacing={"widest"}
+                        fontSize={{ base: "9px", lg: "2xs" }}
+                        textColor={"white"}
+                        mb={{ base: "-18px", lg: "-21px" }}
+                        pt={1.5}
+                        ml={{ base: 2, lg: 2.5 }}
+                      >{`[${index + 1} / ${images.length}]`}</Text>
+                    </Box>
+                    <Image aspectRatio={1} objectFit={"cover"} src={url} />
+                  </Fade>
+                </GridItem>
+              );
+            })
+          )}
         </GridItem>
         <GridItem colSpan={{ base: 9, lg: 4 }} as={Stack}>
           <Fade transition={{ enter: { delay: 0.75, duration: 1 }, exit: { delay: 0.5, duration: 0.75 } }} in={true && !isUnloading}>
@@ -150,7 +158,6 @@ const Product = () => {
                       onClick={() => {
                         dispatch.productModel?.setSelectedVariant(variation?.id);
                       }}
-       
                       isDisabled={isItemSoldOut(product, variation?.id)}
                       borderRight={isItemSoldOut(product, variation?.id) ? "0px" : "1px"}
                       borderColor="black"
