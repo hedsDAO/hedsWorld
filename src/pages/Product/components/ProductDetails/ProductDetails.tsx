@@ -20,7 +20,7 @@ const ProductDetails = () => {
               const allMeasurements = Object.values(variation?.customAttributeValues || {});
               if (variation?.id === selectedVariant)
                 return allMeasurements?.map((measurement) => (
-                  <Flex gap={2}>
+                  <Flex key={measurement.name} gap={2}>
                     <Text minW="12ch" fontFamily={"inter"} fontWeight={"medium"} fontSize="xs" color="blackAlpha.900">
                       {measurement?.name}
                     </Text>
@@ -44,7 +44,7 @@ const ProductDetails = () => {
               Object.values(product?.customAttributeValues)?.map((attribute) => {
                 if (attribute.name === "care" || attribute?.name === "fabric")
                   return (
-                    <Flex gap={2}>
+                    <Flex key={attribute.key} gap={2}>
                       <Text minW="12ch" fontFamily={"inter"} fontWeight={"medium"} fontSize="xs" color="blackAlpha.900">
                         {attribute?.name}
                       </Text>
@@ -70,7 +70,7 @@ const ProductDetails = () => {
               Object.values(product?.customAttributeValues)?.map((attribute) => {
                 if (attribute.name === "shipping" || attribute.name === "returns")
                   return (
-                    <Flex gap={2}>
+                    <Flex key={attribute.key} gap={2}>
                       <Text minW="12ch" fontFamily={"inter"} fontWeight={"medium"} fontSize="xs" color="blackAlpha.900">
                         {attribute?.name}
                       </Text>

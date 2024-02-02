@@ -12,12 +12,12 @@ export const NavLinks = [
     path: "/shop",
     external: false,
   },
-  {
-    id: "events",
-    name: "events",
-    path: "https://heds.space",
-    external: true,
-  },
+  // {
+  //   id: "events",
+  //   name: "events",
+  //   path: "https://heds.space",
+  //   external: true,
+  // },
   {
     id: "about",
     name: "about",

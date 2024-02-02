@@ -37,7 +37,6 @@ export const productModel = createModel<RootModel>()({
         const id = response.data?.id;
         const images = await getProductImages(id);
         const updatedCatalogItem = { ...response.data, productImages: images };
-        console.log(updatedCatalogItem, 'updatedCatalogItem')
         this.setProduct(updatedCatalogItem);
       }
     },

@@ -33,7 +33,6 @@ export const calculateTotalCost = (cart: CartItem[]) => {
 export const isItemSoldOut = (item: any, variation: any) => {
   let variations = item?.itemData?.variations;
   let itemData = variations?.find((v: any) => v.id === variation);
-  console.log(itemData?.itemVariationData?.locationOverrides?.[0]?.soldOut)
   if (itemData?.itemVariationData?.locationOverrides?.[0]?.soldOut) return true;
   else return false;
 };

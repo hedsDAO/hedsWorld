@@ -52,18 +52,25 @@ const Product = () => {
   }, [isClicked]);
 
   const getSelectedVariantSize = () => {
-    const variant = product?.itemData?.variations?.find((variant) => variant?.id === selectedVariant);
+    const variant = product?.itemData?.variations?.find((variant: any) => variant?.id === selectedVariant);
     return variant?.itemVariationData?.name;
   };
 
   return (
-    <Stack overflowX={"hidden"} justifyContent={"start"} py={{ base: 6, lg: 24 }} px={{ base: 2, lg: 0 }} maxW="5xl" mx="auto">
+    <Stack overflowX={"hidden"} justifyContent={"start"} mb={{ base: 20, lg: 0 }} py={{ base: 6, lg: 24 }} px={{ base: 2, lg: 0 }} maxW="5xl" mx="auto">
       <SimpleGrid alignItems={"stretch"} gap={{ base: 2, lg: 8 }} py={{ base: 0, lg: 0 }} px={{ base: 2, lg: 0.5 }} columns={9}>
         <GridItem colSpan={{ base: 9, lg: 5 }} gap={0.5} as={SimpleGrid} columns={{ base: 3, lg: 4 }}>
           {images?.map((url, index) => {
             if (selectedPhoto === index)
               return (
-                <GridItem minH="full" minW="full" display={{ base: "none", lg: "flex" }} onClick={() => dispatch.productModel.setSelectedPhoto(index)} colSpan={selectedPhoto === index ? 4 : 1}>
+                <GridItem
+                  key={index + selectedPhoto}
+                  minH="full"
+                  minW="full"
+                  display={{ base: "none", lg: "flex" }}
+                  onClick={() => dispatch.productModel.setSelectedPhoto(index)}
+                  colSpan={selectedPhoto === index ? 4 : 1}
+                >
                   <Fade transition={{ enter: { delay: 0.5, duration: 0.5 }, exit: { delay: 0.5, duration: 0.75 } }} in={true && !isUnloading}>
                     <Box mixBlendMode={"difference"} position={"relative"}>
                       <Text
@@ -149,7 +156,6 @@ const Product = () => {
             <Stack justifyContent={"center"} px={0}>
               <SimpleGrid inset={-1} columns={4}>
                 {product?.itemData?.variations?.map((variation) => {
-                  console.log(isItemSoldOut(product, selectedVariant));
                   return (
                     <Button
                       as={GridItem}
@@ -164,7 +170,7 @@ const Product = () => {
                       bg={variation?.id === selectedVariant ? "black" : "white"}
                       color={variation?.id === selectedVariant ? "white" : "black"}
                       _hover={{ bg: "blackAlpha.900", color: "white" }}
-                      size="xs"
+                      size={{ base: "sm", lg: "xs" }}
                       rounded="none"
                       fontWeight={"normal"}
                     >
@@ -191,7 +197,7 @@ const Product = () => {
                       });
                     }}
                     isDisabled={isItemSoldOut(product, selectedVariant)}
-                    size="xs"
+                    size={{ base: "sm", lg: "xs" }}
                     fontWeight={"normal"}
                     rounded="none"
                     color="white"

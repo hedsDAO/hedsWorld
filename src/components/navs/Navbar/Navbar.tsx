@@ -37,7 +37,7 @@ const Navbar = () => {
         cursor={"pointer"}
         onClick={() => dispatch.globalModel.handleUnload([isUnloading, () => navigate("/")])}
         objectFit={"contain"}
-        boxSize={{ base: "1.5rem", lg: "1.9rem" }}
+        boxSize={{ base: "1.75rem", lg: "1.9rem" }}
         src={IMAGES.logo}
       />
       {constants.NavLinks?.map((navLink: constants.NavLink, index: number) => {
@@ -70,7 +70,7 @@ const Navbar = () => {
                 pointerEvents={"auto"}
                 onClick={() => dispatch.globalModel.handleUnload([isUnloading, () => navigate(navLink.path)])}
                 fontWeight={"semibold"}
-                fontSize={{ base: "xs", lg: "sm" }}
+                fontSize={{ base: "sm", lg: "sm" }}
                 fontFamily={"karla"}
                 color={active ? "blackAlpha.900" : "blackAlpha.600"}
               >
@@ -80,10 +80,10 @@ const Navbar = () => {
           );
       })}
       <Flex onClick={() => dispatch.cartModel.setIsDrawerOpen(!isDrawerOpen)} alignItems="baseline" gap={2.5} pr={5} ml={"auto"}>
-        <Text fontWeight={"semibold"} fontFamily={"karla"} fontSize={{ base: "xs", lg: "sm" }}>
+        <Text fontWeight={"semibold"} fontFamily={"karla"} fontSize={{ base: "sm", lg: "sm" }}>
           {getTotalQuantity()}
         </Text>
-        <Text as={"i"} className="fa-sharp fa-solid fa-bag-shopping" fontSize={{ base: "xs", lg: "sm" }} color="blackAlpha.900" />
+        <Text as={"i"} className="fa-sharp fa-solid fa-bag-shopping" fontSize={{ base: "sm", lg: "sm" }} color="blackAlpha.900" />
         <CartDrawer />
       </Flex>
     </Flex>
