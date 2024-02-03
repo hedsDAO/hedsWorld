@@ -75,6 +75,13 @@ export const cartModel = createModel<RootModel>()({
           idempotencyKey: "",
           checkoutOptions: {
             askForShippingAddress: true,
+            shippingFee: {
+              name: "Shipping",
+              charge: {
+                amount: 900,
+                currency: "USD",
+              },
+            },
           },
           order: {
             locationId: locationId,
