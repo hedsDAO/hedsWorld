@@ -86,6 +86,11 @@ export const cartModel = createModel<RootModel>()({
           order: {
             locationId: locationId,
             lineItems,
+            taxes: [
+              {
+                autoApplied: true,
+              },
+            ],
           },
         });
         this.clearCart();

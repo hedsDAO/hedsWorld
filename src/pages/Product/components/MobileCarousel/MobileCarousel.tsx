@@ -13,6 +13,7 @@ const MobileCarousel = ({ images }: { images: string[] }) => {
       swiperRef.current.slideTo(index); // Step 4: Navigate to the desired slide
     }
   };
+  
   return (
     <Box w="full" maxH="65vh" minW="91.5vw" mx="auto" overflowX="hidden" borderRadius="lg">
       <Swiper

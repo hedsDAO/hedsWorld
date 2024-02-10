@@ -1,6 +1,6 @@
 import { Dispatch, store } from "@/store/store";
 import { formatPrice, isItemSoldOut, returnVariationSize } from "@/store/utils";
-import { Box, Button, Collapse, Flex, GridItem, Image, SimpleGrid, Stack, Text, SlideFade, Fade, useBoolean, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Button, Collapse, Flex, GridItem, Image, SimpleGrid, Stack, Text, Fade, useBoolean, useBreakpointValue } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -40,7 +40,7 @@ const Product = () => {
     return () => {
       dispatch.productModel.clearState();
     };
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (isClicked) {
@@ -63,25 +63,12 @@ const Product = () => {
           {images?.map((url, index) => {
             if (selectedPhoto === index)
               return (
-                <GridItem
-                  key={index + selectedPhoto}
-                  minH="full"
-                  minW="full"
-                  display={{ base: "none", lg: "flex" }}
-                  onClick={() => dispatch.productModel.setSelectedPhoto(index)}
-                  colSpan={selectedPhoto === index ? 4 : 1}
-                >
+                <GridItem key={index + selectedPhoto} minH="full" minW="full" display={{ base: "none", lg: "flex" }} onClick={() => dispatch.productModel.setSelectedPhoto(index)} colSpan={selectedPhoto === index ? 4 : 1}>
                   <Fade transition={{ enter: { delay: 0.5, duration: 0.5 }, exit: { delay: 0.5, duration: 0.75 } }} in={true && !isUnloading}>
                     <Box mixBlendMode={"difference"} position={"relative"}>
-                      <Text
-                        fontFamily={"inter"}
-                        letterSpacing={"widest"}
-                        fontSize={{ base: "9px", lg: "2xs" }}
-                        textColor={"white"}
-                        mb={{ base: "-18px", lg: "-21px" }}
-                        pt={1.5}
-                        ml={{ base: 2, lg: 2.5 }}
-                      >{`[${index + 1} / ${images.length}]`}</Text>
+                      <Text fontFamily={"inter"} letterSpacing={"widest"} fontSize={{ base: "9px", lg: "2xs" }} textColor={"white"} mb={{ base: "-18px", lg: "-21px" }} pt={1.5} ml={{ base: 2, lg: 2.5 }}>{`[${index + 1} / ${
+                        images.length
+                      }]`}</Text>
                     </Box>
                     <Image aspectRatio={1} objectFit={"cover"} src={url} />
                   </Fade>
@@ -117,15 +104,9 @@ const Product = () => {
                 >
                   <Fade key={url} transition={{ enter: { delay: 0.75, duration: 1 }, exit: { delay: 0.5, duration: 0.75 } }} in={true && !isUnloading}>
                     <Box mixBlendMode={"difference"} position={"relative"}>
-                      <Text
-                        fontFamily={"inter"}
-                        letterSpacing={"widest"}
-                        fontSize={{ base: "9px", lg: "2xs" }}
-                        textColor={"white"}
-                        mb={{ base: "-18px", lg: "-21px" }}
-                        pt={1.5}
-                        ml={{ base: 2, lg: 2.5 }}
-                      >{`[${index + 1} / ${images.length}]`}</Text>
+                      <Text fontFamily={"inter"} letterSpacing={"widest"} fontSize={{ base: "9px", lg: "2xs" }} textColor={"white"} mb={{ base: "-18px", lg: "-21px" }} pt={1.5} ml={{ base: 2, lg: 2.5 }}>{`[${index + 1} / ${
+                        images.length
+                      }]`}</Text>
                     </Box>
                     <Image aspectRatio={1} objectFit={"cover"} src={url} />
                   </Fade>

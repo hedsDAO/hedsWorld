@@ -1,14 +1,15 @@
 import { Dispatch, store } from "@/store/store";
-import { Flex, Spinner, Stack, Text } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import RedirectText from "@/pages/Redirecting/components/RedirectText/RedirectText";
+import SpinnerAnimation from "@/pages/Redirecting/components/SpinnerAnimation/SpinnerAnimation";
+import * as styles from "./styles";
 
 const Redirecting = () => {
   const dispatch = useDispatch<Dispatch>();
   const paymentUrl = useSelector(store.select.cartModel.selectPaymentUrl);
   const linkRef = useRef<HTMLAnchorElement>(null);
-  const location = useLocation();
 
   useEffect(() => {
     if (paymentUrl) {
@@ -18,16 +19,12 @@ const Redirecting = () => {
       }, 1000);
     }
   }, [paymentUrl]);
-
   return (
-    <Stack gap={4} alignItems="center" justifyContent="center" minW="100vw" minH="100vh">
+    <Stack {...styles.$stackStyle0}>
       <a ref={linkRef} href={paymentUrl || ""} />
-      <Spinner size="sm" />
-      <Text fontFamily={"Helvetica"} fontSize={{ base: "sm", lg: "base" }} color="black">
-        Redirecting to Checkout...
-      </Text>
+      <SpinnerAnimation />
+      <RedirectText />
     </Stack>
   );
 };
-
 export default Redirecting;
