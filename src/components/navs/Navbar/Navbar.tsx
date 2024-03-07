@@ -35,6 +35,14 @@ const Navbar = () => {
       <Image
         pointerEvents={"auto"}
         cursor={"pointer"}
+        // onClick={() => dispatch.globalModel.handleUnload([isUnloading, () => navigate("/")])}
+        objectFit={"contain"}
+        boxSize={{ base: "1.75rem", lg: "1.9rem" }}
+        src={"public/images/hedline_w_i.png"}
+      />
+      <Image
+        pointerEvents={"auto"}
+        cursor={"pointer"}
         onClick={() => dispatch.globalModel.handleUnload([isUnloading, () => navigate("/")])}
         objectFit={"contain"}
         boxSize={{ base: "1.75rem", lg: "1.9rem" }}

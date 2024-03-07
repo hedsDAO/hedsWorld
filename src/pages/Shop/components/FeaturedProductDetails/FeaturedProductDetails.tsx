@@ -1,5 +1,4 @@
 import { store } from "@/store/store";
-import { formatPrice } from "@/store/utils";
 import { GridItem, Stack, Button, Text } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -15,17 +14,7 @@ const FeaturedProductDetails = () => {
       <Text fontSize={"2xs"} maxW="15rem" fontFamily={"space"} color="blackAlpha.700">
         {featuredProduct?.itemData?.description}
       </Text>
-      <Button
-        mt={4}
-        onClick={() => navigate(`/product/${featuredProduct?.id}`)}
-        bg="black"
-        minW="50%"
-        size="xs"
-        color="white"
-        _hover={{ bg: "blackAlpha.700" }}
-        rounded="none"
-        fontFamily={"space"}
-      >
+      <Button mt={4} onClick={() => navigate(`/product/${featuredProduct?.id}`)} bg="black" minW="50%" size="xs" color="white" _hover={{ bg: "blackAlpha.700" }} rounded="none" fontFamily={"space"}>
         shop
       </Button>
     </GridItem>
