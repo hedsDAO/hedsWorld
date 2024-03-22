@@ -4,6 +4,7 @@ import { GET_ALL_CATALOG_ITEMS_API_ENDPOINT, getProductImages } from "@/store/ap
 import { CatalogItem } from "@/store/types";
 import { createModel } from "@rematch/core";
 import axios from "axios";
+import Client from "shopify-buy";
 
 export enum ProductCategoryFilter {
   ALL = 0,
@@ -62,6 +63,16 @@ export const landingModel = createModel<RootModel>()({
     async handleLanding() {
       setTimeout(() => this.setFirstLanding(false), 2000);
       setTimeout(() => this.setShowLanding(true), 4000);
+    },
+    async getShopifyProducts() {
+      const client = Client.buildClient({
+        apiVersion: "2024-01",
+        domain: "debc56-7c.myshopify.com",
+        storefrontAccessToken: "f920ee40eab69031f0375c9eb4e48d3a",
+      });
+      const products = (await client.product.fetchAll()).map((product) => product.title);
+      console.log(products);
+      return;
     },
   }),
 });

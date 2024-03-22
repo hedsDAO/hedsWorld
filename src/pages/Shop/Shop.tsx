@@ -15,7 +15,11 @@ const Shop = () => {
 
   useEffect(() => {
     if (isFirstLanding) dispatch.landingModel.handleLanding();
-    if (!allProducts) dispatch.landingModel.getProducts();
+    if (!allProducts) {
+      dispatch.landingModel.getProducts();
+      dispatch.landingModel.getShopifyProducts();
+    }
+
     return () => {
       dispatch.landingModel.clearState();
     };
