@@ -1,19 +1,19 @@
-import { FadeProps } from '@chakra-ui/react';
-import { BoxProps } from '@chakra-ui/react';
-import { SlideFadeProps } from '@chakra-ui/react';
-import { TextProps } from '@chakra-ui/react';
+import { FadeProps } from "@chakra-ui/react";
+import { BoxProps } from "@chakra-ui/react";
+import { SlideFadeProps } from "@chakra-ui/react";
+import { TextProps } from "@chakra-ui/react";
 
 export const $fadeStyle0: FadeProps = {
   transition: {
-  enter: {
-    delay: 0.5,
-    duration: 1
+    enter: {
+      delay: 0.5,
+      duration: 1,
+    },
+    exit: {
+      delay: 0.25,
+      duration: 0.5,
+    },
   },
-  exit: {
-    delay: 0.25,
-    duration: 0.5
-  }
-},
 };
 
 export const $boxStyle1: BoxProps = {
@@ -26,15 +26,15 @@ export const $boxStyle1: BoxProps = {
 
 export const $slideFadeStyle2: SlideFadeProps = {
   transition: {
-  enter: {
-    delay: 1.5,
-    duration: 1.5
+    enter: {
+      delay: 1.5,
+      duration: 1.5,
+    },
+    exit: {
+      delay: 0.5,
+      duration: 0.75,
+    },
   },
-  exit: {
-    delay: 0.5,
-    duration: 0.75
-  }
-},
 };
 
 export const $boxStyle3: BoxProps = {
@@ -54,4 +54,3 @@ export const $textStyle4: TextProps = {
   fontFamily: "open",
   color: "white",
 };
-

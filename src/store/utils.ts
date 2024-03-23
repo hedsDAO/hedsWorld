@@ -1,10 +1,11 @@
-import { CartItem } from "@/models/cart";
 import { CatalogItem, ItemVariationData } from "./types";
 import { ProductCategoryFilter } from "@/models/landing";
 
 export const formatPrice = (price?: number): string => {
   if (!price) return "";
-  return `$${price / 100}`;
+
+  if (price.toString()?.split(".")[1]?.length === 2) return `$${price}`;
+  else return `$${price}0`;
 };
 
 export const returnVariationSize = (variationName?: string): string => {
@@ -15,20 +16,6 @@ export const returnVariationSize = (variationName?: string): string => {
 export const returnVariationColor = (variationName?: string): string => {
   if (!variationName) return "";
   return variationName.split(",")[1];
-};
-
-export const calculateTotalCost = (cart: CartItem[]) => {
-  const totalPrice = cart.reduce((acc, item) => {
-    const formattedPrice = item.price.replace("$", "");
-    const quantity = Number(item.quantity);
-    const totalCostPerItem = Number(formattedPrice) * quantity;
-    console.log(totalCostPerItem);
-    return acc + totalCostPerItem;
-  }, 0);
-  const remainderInCents = totalPrice?.toString()?.split(".")[1]?.length;
-  if (remainderInCents === 2) return `$${totalPrice}`;
-  else if (remainderInCents === 1) return `$${totalPrice.toString()}0`;
-  else return `$${totalPrice}.00`;
 };
 
 export const isItemSoldOut = (item: any, variation: any) => {
@@ -45,5 +32,5 @@ export const returnProductCategory = (product: CatalogItem) => {
     if (category === "apparel") return ProductCategoryFilter.APPAREL;
     if (category === "accessories") return ProductCategoryFilter.ACCESSORIES;
     else return ProductCategoryFilter.ALL;
-  } else return ProductCategoryFilter.ALL
+  } else return ProductCategoryFilter.ALL;
 };

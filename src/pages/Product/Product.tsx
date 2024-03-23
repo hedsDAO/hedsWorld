@@ -1,41 +1,30 @@
 import { Dispatch, store } from "@/store/store";
 import { formatPrice, isItemSoldOut, returnVariationSize } from "@/store/utils";
-import { Box, Button, Collapse, Flex, GridItem, Image, SimpleGrid, Stack, Text, Fade, useBoolean, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Button, Collapse, Flex, GridItem, Image, SimpleGrid, Stack, Text, Fade, useBoolean, useBreakpointValue, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { storage } from "@/App";
-import { getDownloadURL, listAll, ref } from "firebase/storage";
 import ProductDetails from "./components/ProductDetails/ProductDetails";
 import AddedAnimation from "@/components/animations/Added/Added";
 import MobileCarousel from "./components/MobileCarousel/MobileCarousel";
+import { ProductOption } from "shopify-buy";
 
 const Product = () => {
   const [previousImage, setPreviousImage] = useState<number>(0);
   const dispatch = useDispatch<Dispatch>();
   const isMobile = useBreakpointValue({ base: true, lg: false });
   const [isClicked, setIsClicked] = useBoolean();
-  const cart = useSelector(store.select.cartModel.selectCart);
   const isUnloading = useSelector(store.select.globalModel.selectIsUnloading);
   const product = useSelector(store.select.productModel.selectProduct);
   const selectedVariant = useSelector(store.select.productModel.selectVariant);
   const selectedPhoto = useSelector(store.select.productModel.selectPhoto);
-  const [images, setImages] = useState<string[]>();
+  const checkout = useSelector(store.select.cartModel.selectCheckout);
   const { id } = useParams<{ id: string }>();
 
-  const getImages = async (id: string) => {
-    const storageRef = ref(storage, `products/${id}`);
-    const list = await listAll(storageRef);
-    const urls = list.items.map((item) => getDownloadURL(item));
-    const images = await Promise.all(urls);
-    setImages(images);
-  };
-
   useEffect(() => {
-    if (id && !product) {
-      getImages(id);
+    if (id) {
       dispatch.productModel.setSelectedPhoto(0);
-      dispatch.productModel.getProductById(id);
+      dispatch.productModel.getShopifyProductByHandle(id);
     }
     return () => {
       dispatch.productModel.clearState();
@@ -51,37 +40,33 @@ const Product = () => {
     }
   }, [isClicked]);
 
-  const getSelectedVariantSize = () => {
-    const variant = product?.itemData?.variations?.find((variant: any) => variant?.id === selectedVariant);
-    return variant?.itemVariationData?.name;
-  };
-
   return (
     <Stack overflowX={"hidden"} justifyContent={"start"} mb={{ base: 20, lg: 0 }} py={{ base: 6, lg: 24 }} px={{ base: 2, lg: 0 }} maxW="5xl" mx="auto">
       <SimpleGrid alignItems={"stretch"} gap={{ base: 2, lg: 8 }} py={{ base: 0, lg: 0 }} px={{ base: 2, lg: 0.5 }} columns={9}>
-        <GridItem colSpan={{ base: 9, lg: 5 }} gap={0.5} as={SimpleGrid} columns={{ base: 3, lg: 4 }}>
-          {images?.map((url, index) => {
+        <GridItem colSpan={{ base: 9, lg: 5 }} gap={1} as={SimpleGrid} columns={{ base: 3, lg: 4 }}>
+          {product?.images?.map((image, index) => {
             if (selectedPhoto === index)
               return (
                 <GridItem key={index + selectedPhoto} minH="full" minW="full" display={{ base: "none", lg: "flex" }} onClick={() => dispatch.productModel.setSelectedPhoto(index)} colSpan={selectedPhoto === index ? 4 : 1}>
                   <Fade transition={{ enter: { delay: 0.5, duration: 0.5 }, exit: { delay: 0.5, duration: 0.75 } }} in={true && !isUnloading}>
                     <Box mixBlendMode={"difference"} position={"relative"}>
                       <Text fontFamily={"inter"} letterSpacing={"widest"} fontSize={{ base: "9px", lg: "2xs" }} textColor={"white"} mb={{ base: "-18px", lg: "-21px" }} pt={1.5} ml={{ base: 2, lg: 2.5 }}>{`[${index + 1} / ${
-                        images.length
+                        product?.images.length
                       }]`}</Text>
                     </Box>
-                    <Image aspectRatio={1} objectFit={"cover"} src={url} />
+                    <Image aspectRatio={1} objectFit={"cover"} src={image.src} />
                   </Fade>
                 </GridItem>
               );
           })}
 
-          {isMobile && images ? (
-            <MobileCarousel images={images} />
+          {isMobile && product?.images ? (
+            <MobileCarousel images={product?.images} />
           ) : (
-            images?.map((url, index: number) => {
+            product?.images?.map((image, index: number) => {
               return (
                 <GridItem
+                  key={image.url}
                   display={{ base: "none", lg: "flex" }}
                   onMouseEnter={() => {
                     if (selectedPhoto !== index) {
@@ -102,13 +87,13 @@ const Product = () => {
                   }}
                   colSpan={{ base: 3, lg: 1 }}
                 >
-                  <Fade key={url} transition={{ enter: { delay: 0.75, duration: 1 }, exit: { delay: 0.5, duration: 0.75 } }} in={true && !isUnloading}>
+                  <Fade key={image?.altText} transition={{ enter: { delay: 0.75, duration: 1 }, exit: { delay: 0.5, duration: 0.75 } }} in={true && !isUnloading}>
                     <Box mixBlendMode={"difference"} position={"relative"}>
                       <Text fontFamily={"inter"} letterSpacing={"widest"} fontSize={{ base: "9px", lg: "2xs" }} textColor={"white"} mb={{ base: "-18px", lg: "-21px" }} pt={1.5} ml={{ base: 2, lg: 2.5 }}>{`[${index + 1} / ${
-                        images.length
+                        product?.images?.length
                       }]`}</Text>
                     </Box>
-                    <Image aspectRatio={1} objectFit={"cover"} src={url} />
+                    <Image aspectRatio={1} objectFit={"cover"} src={image.src} />
                   </Fade>
                 </GridItem>
               );
@@ -117,91 +102,67 @@ const Product = () => {
         </GridItem>
         <GridItem colSpan={{ base: 9, lg: 4 }} as={Stack}>
           <Fade transition={{ enter: { delay: 0.75, duration: 1 }, exit: { delay: 0.5, duration: 0.75 } }} in={true && !isUnloading}>
-            <Text fontFamily={"Helvetica"} letterSpacing={"wide"} color="blackAlpha.900" fontSize="md">
-              {product?.itemData?.name}
-            </Text>
-            <Text mt={"-0.5px !important"} letterSpacing={"wide"} fontFamily={"Helvetica"} color="blackAlpha.800" fontSize="sm">
-              {formatPrice(product?.itemData?.variations?.[0]?.itemVariationData?.priceMoney?.amount)}
-            </Text>
-            <Text lineHeight={1.35} pt={8} maxW={{ lg: "75%" }} fontFamily={"space"} fontSize="xs" textColor={"blackAlpha.700"}>
-              {product?.itemData?.description}
-            </Text>
-            {
-              <Flex py={10} px={0} alignItems={"center"} gap={2.5}>
-                <Box h="5" w="5" bg={`${product?.itemData?.variations?.[0]?.itemVariationData?.name?.split(", ")?.[1]}`} />
-                <Text fontFamily={"Helvetica"} fontSize={"xs"}>
-                  {product?.itemData?.variations?.[0]?.itemVariationData?.name?.split(", ")?.[1]}
-                </Text>
-              </Flex>
-            }
-            <Stack justifyContent={"center"} px={0}>
-              <SimpleGrid inset={-1} columns={4}>
-                {product?.itemData?.variations?.map((variation) => {
-                  return (
-                    <Button
-                      as={GridItem}
-                      colSpan={1}
-                      key={variation?.id}
-                      onClick={() => {
-                        dispatch.productModel?.setSelectedVariant(variation?.id);
-                      }}
-                      isDisabled={isItemSoldOut(product, variation?.id)}
-                      borderRight={isItemSoldOut(product, variation?.id) ? "0px" : "1px"}
-                      borderColor="black"
-                      bg={variation?.id === selectedVariant ? "black" : "white"}
-                      color={variation?.id === selectedVariant ? "white" : "black"}
-                      _hover={{ bg: "blackAlpha.900", color: "white" }}
-                      size={{ base: "sm", lg: "xs" }}
-                      rounded="none"
-                      fontWeight={"normal"}
-                    >
-                      {returnVariationSize(variation.itemVariationData?.name).toLowerCase()}
-                    </Button>
-                  );
-                })}
-              </SimpleGrid>
-              <Collapse in={!!selectedVariant}>
-                <Stack mb={8} mt={5}>
-                  <Button
-                    fontFamily={"Helvetica"}
-                    maxW={{ base: "100%", lg: "21.25ch" }}
-                    onClick={() => {
-                      setIsClicked.on();
-                      dispatch.cartModel?.addCartItem({
-                        price: formatPrice(product?.itemData?.variations?.[0].itemVariationData?.priceMoney?.amount),
-                        name: product?.itemData?.name || "",
-                        size: returnVariationSize(getSelectedVariantSize() || ""),
-                        catalogObjectId: selectedVariant || "",
-                        itemType: product?.type || "",
-                        quantity: "1",
-                        image: product?.productImages?.[0] || "",
-                      });
-                    }}
-                    isDisabled={isItemSoldOut(product, selectedVariant)}
-                    size={{ base: "sm", lg: "xs" }}
-                    fontWeight={"normal"}
-                    rounded="none"
-                    color="white"
-                    bg={isClicked ? "white" : "black"}
-                    _hover={{ background: isClicked ? "white" : "black" }}
-                    _focus={{ background: isClicked ? "white" : "black" }}
-                  >
-                    {isItemSoldOut(product, selectedVariant) ? (
-                      "sold out"
-                    ) : isClicked ? (
-                      <Fade transition={{ enter: { delay: 0, duration: 0.5 }, exit: { delay: 0, duration: 0.15 } }} in={isClicked}>
-                        <Box h={{ base: "100px", lg: "80px" }} w={{ base: "100px", lg: "80px" }}>
-                          <AddedAnimation />
-                        </Box>
-                      </Fade>
-                    ) : (
-                      "add to cart"
-                    )}
-                  </Button>
-                </Stack>
-              </Collapse>
+            <Stack mb={4} mt={2}>
+              <Text textTransform={"uppercase"} fontFamily={"Helvetica"} letterSpacing={"wide"} color="blackAlpha.900" fontSize="3xl">
+                {product?.title}
+              </Text>
+              <Text mt={0} lineHeight={1.35} maxW={{ lg: "75%" }} fontFamily={"Helvetica"} fontSize="xs" textColor={"blackAlpha.700"}>
+                {product?.description}
+              </Text>
+              <Text fontFamily={"open"} fontWeight={700} fontSize={"sm"}>
+                {formatPrice(selectedVariant === null ? product?.variants[0]?.price?.amount : product?.variants[selectedVariant]?.price?.amount)}
+              </Text>
             </Stack>
-            <ProductDetails />
+            <Stack gap={5} maxW={{ lg: "50%" }}>
+              <Menu size="xs">
+                <MenuButton
+                  _hover={{ bg: "black", color: "white" }}
+                  _active={{ bg: "black", color: "white" }}
+                  border="1px solid"
+                  rounded="none"
+                  size="xs"
+                  bg="transparent"
+                  textTransform={"uppercase"}
+                  as={Button}
+                  rightIcon={<Text as="i" className="fas fa-chevron-down" />}
+                >
+                  {selectedVariant === null ? `SELECT ${product?.options?.[0]?.name}` : product?.variants[selectedVariant]?.title}
+                </MenuButton>
+                <MenuList borderTop={"1px solid"} borderX="1px solid" py={0} rounded={"none"} bg="white">
+                  {product?.variants?.map((variant, index) => (
+                    <MenuItem
+                      // shopify needs to update types, this is a false positive
+                      //@ts-ignore
+                      isDisabled={!variant?.available}
+                      onClick={() => dispatch.productModel.setSelectedVariant(index)}
+                      fontSize={"sm"}
+                      py={1}
+                      borderBottom={"1px solid"}
+                      _focus={{ bg: "black", color: "white" }}
+                      _hover={{ bg: "black", color: "white" }}
+                    >
+                      {variant?.title}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </Menu>
+              <Button
+                onClick={() => {
+                  if (selectedVariant !== null && checkout && product?.variants?.[selectedVariant]?.id) {
+                    dispatch.cartModel.addLineItemToCart([checkout.id, [{ variantId: product?.variants?.[selectedVariant]?.id, quantity: 1 }]]);
+                  }
+                }}
+                isDisabled={selectedVariant === null}
+                _hover={{ bg: "black", color: "white" }}
+                _active={{ bg: "black", color: "white" }}
+                border="1px solid"
+                rounded="3xl"
+                size="xs"
+                bg="transparent"
+              >
+                ADD TO CART
+              </Button>
+            </Stack>
           </Fade>
         </GridItem>
       </SimpleGrid>

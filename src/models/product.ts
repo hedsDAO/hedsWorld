@@ -3,10 +3,11 @@ import { GET_PRODUCT_BY_ID_API_ENDPOINT, getProductImages } from "@/store/api";
 import { createModel } from "@rematch/core";
 import axios from "axios";
 import { CatalogItem } from "@/store/types";
+import Client, { Product } from "shopify-buy";
 
 interface ProductModelState {
-  product: CatalogItem | null;
-  selectedVariant: string | null;
+  product: Product | null;
+  selectedVariant: number | null;
   selectedPhoto: number | null;
 }
 
@@ -17,8 +18,8 @@ export const productModel = createModel<RootModel>()({
     selectedPhoto: 0,
   } as ProductModelState,
   reducers: {
-    setProduct: (state: ProductModelState, product: CatalogItem) => ({ ...state, product }),
-    setSelectedVariant: (state: ProductModelState, selectedVariant: string) => ({ ...state, selectedVariant }),
+    setProduct: (state: ProductModelState, product: Product) => ({ ...state, product }),
+    setSelectedVariant: (state: ProductModelState, selectedVariant: number) => ({ ...state, selectedVariant }),
     setSelectedPhoto: (state: ProductModelState, selectedPhoto: number) => ({ ...state, selectedPhoto }),
     clearState: () => ({ product: null, selectedVariant: null, selectedPhoto: null }),
   },
@@ -28,17 +29,15 @@ export const productModel = createModel<RootModel>()({
     selectPhoto: () => slice((state) => state.selectedPhoto),
   }),
   effects: () => ({
-    async getProductById(id: string) {
-      const response = await axios.get(GET_PRODUCT_BY_ID_API_ENDPOINT(id));
-      const product: CatalogItem = response.data;
-      const variantId: string = product.itemData?.variations?.[0]?.id || "";
-      this.setSelectedVariant(variantId);
-      if (response.data) {
-        const id = response.data?.id;
-        const images = await getProductImages(id);
-        const updatedCatalogItem = { ...response.data, productImages: images };
-        this.setProduct(updatedCatalogItem);
-      }
+    async getShopifyProductByHandle(id: string) {
+      const client = Client.buildClient({
+        apiVersion: "2024-01",
+        domain: "debc56-7c.myshopify.com",
+        storefrontAccessToken: "f920ee40eab69031f0375c9eb4e48d3a",
+      });
+      const product = await client.product.fetchByHandle(id).then((product) => product);
+      this.setProduct(JSON.parse(JSON.stringify(product)));
+      return;
     },
   }),
 });

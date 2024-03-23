@@ -16,16 +16,14 @@ const FeaturedProductHeader = () => {
       <Fade
         {...styles.$fadeStyle0}
         onClick={() => {
-          dispatch.globalModel.handleUnload([isUnloading, () => navigate("/product/WLLLGVR6NIGUJGJOZ7M2LCF6")]);
+          dispatch.globalModel.handleUnload([isUnloading, () => navigate("/product/hed-dot-tee")]);
         }}
         in={true && !isUnloading}
       >
         <Box {...styles.$boxStyle1} loop autoPlay muted playsInline as="video" src={IMAGES.shirts_2} />
       </Fade>
       <SlideFade {...styles.$slideFadeStyle2} in={true && !isUnloading}>
-        <Box {...styles.$boxStyle3}>
-          <Text {...styles.$textStyle4}>{constants.text1}</Text>
-        </Box>
+
       </SlideFade>
     </Fragment>
   );

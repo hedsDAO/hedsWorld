@@ -1,134 +1,114 @@
-import { CartItem } from "@/models/cart";
 import { Dispatch, store } from "@/store/store";
-import { calculateTotalCost } from "@/store/utils";
-import { NumberDecrementStepper, NumberIncrementStepper, NumberInputField, NumberInputStepper } from "@chakra-ui/react";
-import { NumberInput, Button, Flex, Image, Stack, Text } from "@chakra-ui/react";
-import { Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay } from "@chakra-ui/react";
-import { useEffect, useRef } from "react";
+import { formatPrice } from "@/store/utils";
+import { Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Image, Stack, Text } from "@chakra-ui/react";
+import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 const CartDrawer = () => {
-  const navigate = useNavigate();
   const tempRef = useRef(null);
   const dispatch = useDispatch<Dispatch>();
   const isDrawerOpen = useSelector(store.select.cartModel.selectIsDrawerOpen);
-  const cart = useSelector(store.select.cartModel.selectCart);
-  const paymentUrl = useSelector(store.select.cartModel.selectPaymentUrl);
-
-  const handleQuantiyChange = (e: string, index: number) => {
-    dispatch.cartModel.updateCartItem({ index, quantity: e });
-  };
-
+  const checkout = useSelector(store.select.cartModel.selectCheckout);
+  const checkoutLineItems = useSelector(store.select.cartModel.selectCheckoutLineItems);
   return (
-    <Drawer trapFocus={false} size={{ base: "100%", lg: "md" }} isOpen={isDrawerOpen} placement="right" initialFocusRef={tempRef} onClose={() => dispatch.cartModel.setIsDrawerOpen(false)}>
+    <Drawer trapFocus={false} size={{ base: "100%", lg: "sm" }} isOpen={isDrawerOpen} placement="right" initialFocusRef={tempRef} onClose={() => dispatch.cartModel.setIsDrawerOpen(false)}>
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerHeader>cart</DrawerHeader>
-        <DrawerBody as={Stack}>
-          {cart?.length ? (
-            cart?.map((item, index) => {
-              return (
-                <Flex key={item.name} bg="blackAlpha.200" p={2} alignItems={"center"} gap={5}>
-                  <Image boxSize="4rem" src={item?.image} aspectRatio={1} />
-                  <Stack>
-                    <Flex alignItems={"end"} gap={1.5}>
-                      {item?.size ? (
-                        <Text fontSize={{ base: "xs", lg: "lg" }} fontWeight={"medium"}>
-                          {item?.size?.slice(0, 3).toUpperCase()} /
-                        </Text>
-                      ) : (
-                        ""
-                      )}
-                      <Text fontSize={{ base: "xs", lg: "lg" }} fontWeight={"medium"}>
-                        {item?.name}
-                      </Text>
-                    </Flex>
-                    <Text fontSize="sm" fontWeight={"normal"}>
-                      {item?.price}
+        <DrawerHeader minW="100%" lineHeight={"20px"}>
+          CHECKOUT
+        </DrawerHeader>
+        <Divider />
+        <DrawerCloseButton />
+        <DrawerBody minW="100%" px={6} mt={6} gap={3} as={Stack}>
+          {checkoutLineItems?.length ? (
+            checkoutLineItems?.map((lineItem) => (
+              <Flex gap={6} alignItems={"center"}>
+                <Image rounded={"sm"} maxH="80px" src={lineItem?.variant?.image.src || ""} objectFit={"cover"} aspectRatio={1} />
+                <Stack mt={-1} gap={0}>
+                  <Text textTransform={"uppercase"} fontFamily={"hanken"} fontSize={"lg"} fontWeight={600} key={lineItem.id}>
+                    {lineItem.title}
+                  </Text>
+                  <Flex fontSize={"2xs"}>
+                    <Text fontWeight={600} fontFamily={"hanken"} textTransform={"uppercase"} mr={1}>
+                      {lineItem?.variant?.selectedOptions?.[0]?.name}:
                     </Text>
-                  </Stack>
-                  <NumberInput
-                    onChange={(e) => {
-                      handleQuantiyChange(e, index);
+                    <Text fontWeight={400} fontFamily={"hanken"} textTransform={"uppercase"}>
+                      {lineItem?.variant?.title}
+                    </Text>
+                  </Flex>
+                  <Flex fontSize={"2xs"}>
+                    <Text fontWeight={600} fontFamily={"hanken"} textTransform={"uppercase"} mr={1}>
+                      {"quantity:"}
+                    </Text>
+                    <Text fontWeight={400} fontFamily={"hanken"} textTransform={"uppercase"}>
+                      {lineItem?.quantity}
+                    </Text>
+                  </Flex>
+                </Stack>
+                <Stack py={1} justifyContent={"space-between"} minH="100%" ml="auto">
+                  <Text fontWeight={700} fontSize={"xs"} fontFamily={"inter"} textAlign={"right"}>
+                    {formatPrice(lineItem?.variant?.price?.amount)}
+                  </Text>
+                  <Text
+                    onClick={() => {
+                      dispatch.cartModel.removeLineItemFromCart([checkout?.id || "", [lineItem.id]]);
                     }}
-                    ml="auto"
-                    maxW="6ch"
-                    size="sm"
-                    defaultValue={cart?.[index]?.quantity}
-                    min={1}
-                    max={5}
+                    cursor={"pointer"}
+                    _hover={{ color: "black" }}
+                    color="heds.700"
+                    textUnderlineOffset={"3px"}
+                    textDecoration={"underline"}
+                    fontSize={"2xs"}
+                    fontFamily={"inter"}
+                    textAlign={"right"}
                   >
-                    <NumberInputField
-                      onFocus={() => {}}
-                      defaultValue={+item?.quantity}
-                      _disabled={{ borderColor: "transparent" }}
-                      _focusVisible={{ borderColor: "transparent" }}
-                      borderColor={"transparent"}
-                      rounded="none"
-                    />
-                    <NumberInputStepper _disabled={{ borderColor: "transparent", color: "transparent" }} _focusVisible={{ borderColor: "transparent" }} borderColor={"transparent"} rounded="none">
-                      <NumberIncrementStepper _disabled={{ borderColor: "transparent", color: "blackAlpha.500" }} borderColor={"transparent"} />
-                      <NumberDecrementStepper _disabled={{ borderColor: "transparent", color: "blackAlpha.500" }} borderColor={"transparent"} />
-                    </NumberInputStepper>
-                  </NumberInput>
-                  <Text mr={3} fontSize="sm" color="blackAlpha.700" _hover={{ color: "black" }} as="i" onClick={() => dispatch.cartModel.removeCartItem(index)} className="fas fa-trash"></Text>
-                </Flex>
-              );
-            })
+                    remove
+                  </Text>
+                </Stack>
+              </Flex>
+            ))
           ) : (
-            <Text fontSize="sm" fontStyle={"italic"} color="blackAlpha.600">
+            <Text mt={-1} fontWeight={500} color="heds.500" fontFamily={"hanken"} fontSize={"sm"} ml={1}>
               there's nothing here...
             </Text>
           )}
         </DrawerBody>
-        <DrawerFooter>
-          <Stack alignItems={"end"}>
-            {cart?.length ? (
-              <Flex alignItems={"baseline"} gap={3} mb={5}>
-                <Text fontFamily={"inter"} fontSize={"sm"}>
-                  total
-                </Text>
-                <Text fontFamily={"inter"} fontSize={"lg"}>
-                  {" "}
-                  {cart ? calculateTotalCost(cart) : null}
-                </Text>
-              </Flex>
-            ) : (
-              <></>
-            )}
-            <Flex>
-              <Button
-                color="black"
-                border="1px"
-                rounded="none"
-                size="sm"
-                bg="transparent"
-                _focusVisible={{ borderColor: "black" }}
-                _hover={{ background: "blackAlpha.200" }}
-                mr={2}
-                onClick={() => dispatch.cartModel.setIsDrawerOpen(false)}
-              >
-                cancel
-              </Button>
-              <Button
-                onClick={() => {
-                  if (cart) {
-                    dispatch.cartModel.createPaymentLink(cart);
-                    navigate("/redirect");
+        <DrawerFooter gap={4} as={Stack}>
+          <Flex minW="100%" justifyContent={"space-between"}>
+            <Text fontWeight={500} color="heds.500" fontFamily={"hanken"} fontSize={"sm"}>
+              SUBTOTAL
+            </Text>
+            <Text fontWeight={700} color="black" fontFamily={"hanken"} fontSize={"sm"}>
+              {formatPrice(checkout?.subtotalPrice.amount)}
+            </Text>
+          </Flex>
+          <Button
+            isDisabled={!checkout?.webUrl || !checkoutLineItems?.length}
+            onClick={() => {
+              dispatch.globalModel.handleUnload([
+                false,
+                () => {
+                  if (window && checkout?.webUrl) {
+                    dispatch.cartModel.setIsDrawerOpen(false);
+                    window.location.href = checkout?.webUrl;
                   }
-                }}
-                isDisabled={cart?.length === 0 || !cart}
-                color="white"
-                rounded="none"
-                size="sm"
-                bg="black"
-                _hover={{ background: "blackAlpha.700" }}
-              >
-                checkout
-              </Button>
-            </Flex>
-          </Stack>
+                },
+              ]);
+            }}
+            size="sm"
+            bg="white"
+            color="black"
+            border="1px solid"
+            borderColor="black"
+            _hover={{ bg: "black", color: "white" }}
+            transition="0.2s all ease-in-out"
+            rounded="full"
+            minW="100%"
+          >
+            <Text fontFamily={"hanken"} fontSize={"xs"} fontWeight={600} textTransform={"uppercase"}>
+              checkout
+            </Text>
+          </Button>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
