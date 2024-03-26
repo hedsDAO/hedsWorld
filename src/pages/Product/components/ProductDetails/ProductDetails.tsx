@@ -1,89 +1,76 @@
-import { store } from "@/store/store";
-import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Text, Stack, Flex } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { Dispatch, store } from "@/store/store";
+import { formatPrice } from "@/store/utils";
+import { Fade, Text, Stack, Button, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProductDetails = () => {
+  const dispatch = useDispatch<Dispatch>();
+  const isUnloading = useSelector(store.select.globalModel.selectIsUnloading);
+  const checkout = useSelector(store.select.cartModel.selectCheckout);
   const product = useSelector(store.select.productModel.selectProduct);
   const selectedVariant = useSelector(store.select.productModel.selectVariant);
   return (
-    <Accordion allowToggle>
-      <AccordionItem py={2.5} borderColor="blackAlpha.600" mt={1}>
-        <AccordionButton px={0} bg={"transparent"} _hover={{ bg: "white", color: "black" }} _active={{ bg: "white", color: "black" }} _focus={{ bg: "white", color: "black" }} color={"black"}>
-          <Text px={1.5} fontSize="xs" fontFamily={"Helvetica"} as="span" flex="1" textAlign="left">
-            product details
-          </Text>
-          <AccordionIcon />
-        </AccordionButton>
-        <AccordionPanel px={2} pb={4}>
-          <Stack gap={3.5}>
-            {product?.itemData?.variations?.map((variation) => {
-              const allMeasurements = Object.values(variation?.customAttributeValues || {});
-              if (variation?.id === selectedVariant)
-                return allMeasurements?.map((measurement) => (
-                  <Flex key={measurement.name} gap={2}>
-                    <Text minW="12ch" fontFamily={"inter"} fontWeight={"medium"} fontSize="xs" color="blackAlpha.900">
-                      {measurement?.name}
-                    </Text>
-                    <Text fontFamily={"inter"} fontSize="xs" color="blackAlpha.700">{`${Number(measurement?.numberValue)}"`}</Text>
-                  </Flex>
-                ));
-            })}
-          </Stack>
-        </AccordionPanel>
-      </AccordionItem>
-      <AccordionItem py={2.5} borderColor="blackAlpha.600" mt={1}>
-        <AccordionButton px={0} bg={"transparent"} _hover={{ bg: "white", color: "black" }} _active={{ bg: "white", color: "black" }} _focus={{ bg: "white", color: "black" }} color={"black"}>
-          <Text px={1.5} fontSize="xs" fontFamily={"Helvetica"} as="span" flex="1" textAlign="left">
-            fabric and care
-          </Text>
-          <AccordionIcon />
-        </AccordionButton>
-        <AccordionPanel px={2} pb={4}>
-          <Stack gap={3.5}>
-            {product?.customAttributeValues &&
-              Object.values(product?.customAttributeValues)?.map((attribute) => {
-                if (attribute.name === "care" || attribute?.name === "fabric")
-                  return (
-                    <Flex key={attribute.key} gap={2}>
-                      <Text minW="12ch" fontFamily={"inter"} fontWeight={"medium"} fontSize="xs" color="blackAlpha.900">
-                        {attribute?.name}
-                      </Text>
-                      <Text minW="12ch" fontSize="xs" color="blackAlpha.700" fontFamily={"inter"}>
-                        {attribute?.stringValue}
-                      </Text>
-                    </Flex>
-                  );
-              })}
-          </Stack>
-        </AccordionPanel>
-      </AccordionItem>
-      <AccordionItem py={2.5} borderColor="blackAlpha.600" mt={1}>
-        <AccordionButton px={0} bg={"transparent"} _hover={{ bg: "white", color: "black" }} _active={{ bg: "white", color: "black" }} _focus={{ bg: "white", color: "black" }} color={"black"}>
-          <Text px={1.5} fontSize="xs" fontFamily={"Helvetica"} as="span" flex="1" textAlign="left">
-            shipping and returns
-          </Text>
-          <AccordionIcon />
-        </AccordionButton>
-        <AccordionPanel px={2} pb={4}>
-          <Stack gap={3}>
-            {product?.customAttributeValues &&
-              Object.values(product?.customAttributeValues)?.map((attribute) => {
-                if (attribute.name === "shipping" || attribute.name === "returns")
-                  return (
-                    <Flex key={attribute.key} gap={2}>
-                      <Text minW="12ch" fontFamily={"inter"} fontWeight={"medium"} fontSize="xs" color="blackAlpha.900">
-                        {attribute?.name}
-                      </Text>
-                      <Text minW="5ch" fontSize="xs" color="blackAlpha.700" fontFamily={"inter"}>
-                        {attribute?.stringValue}
-                      </Text>
-                    </Flex>
-                  );
-              })}
-          </Stack>
-        </AccordionPanel>
-      </AccordionItem>
-    </Accordion>
+    <Fade transition={{ enter: { delay: 0.75, duration: 1 }, exit: { delay: 0.5, duration: 0.75 } }} in={true && !isUnloading}>
+      <Stack mb={4} mt={2}>
+        <Text textTransform={"uppercase"} fontFamily={"Helvetica"} letterSpacing={"wide"} color="blackAlpha.900" fontSize="3xl">
+          {product?.title}
+        </Text>
+        <Text dangerouslySetInnerHTML={{ __html: product?.descriptionHtml || "" }} mt={0} lineHeight={1.35} maxW={{ lg: "75%" }} fontFamily={"Helvetica"} fontSize="xs" textColor={"blackAlpha.700"}></Text>
+        <Text fontFamily={"open"} fontWeight={700} fontSize={"sm"}>
+          {formatPrice(selectedVariant === null ? product?.variants[0]?.price?.amount : product?.variants[selectedVariant]?.price?.amount)}
+        </Text>
+      </Stack>
+      <Stack gap={5} maxW={{ lg: "50%" }}>
+        <Menu size="xs">
+          <MenuButton
+            _hover={{ bg: "black", color: "white" }}
+            _active={{ bg: "black", color: "white" }}
+            border="1px solid"
+            rounded="none"
+            size="xs"
+            bg="transparent"
+            textTransform={"uppercase"}
+            as={Button}
+            rightIcon={<Text as="i" className="fas fa-chevron-down" />}
+          >
+            {selectedVariant === null ? `SELECT ${product?.options?.[0]?.name}` : product?.variants[selectedVariant]?.title}
+          </MenuButton>
+          <MenuList borderTop={"1px solid"} borderX="1px solid" py={0} rounded={"none"} bg="white">
+            {product?.variants?.map((variant, index) => (
+              <MenuItem
+                // shopify needs to update types, this is a false positive
+                //@ts-ignore
+                isDisabled={!variant?.available}
+                onClick={() => dispatch.productModel.setSelectedVariant(index)}
+                fontSize={"sm"}
+                py={1}
+                borderBottom={"1px solid"}
+                _focus={{ bg: "black", color: "white" }}
+                _hover={{ bg: "black", color: "white" }}
+              >
+                {variant?.title}
+              </MenuItem>
+            ))}
+          </MenuList>
+        </Menu>
+        <Button
+          onClick={() => {
+            if (selectedVariant !== null && checkout && product?.variants?.[selectedVariant]?.id) {
+              dispatch.cartModel.addLineItemToCart([checkout.id, [{ variantId: product?.variants?.[selectedVariant]?.id, quantity: 1 }]]);
+            }
+          }}
+          isDisabled={selectedVariant === null}
+          _hover={{ bg: "black", color: "white" }}
+          _active={{ bg: "black", color: "white" }}
+          border="1px solid"
+          rounded="3xl"
+          size="xs"
+          bg="transparent"
+        >
+          ADD TO CART
+        </Button>
+      </Stack>
+    </Fade>
   );
 };
 
