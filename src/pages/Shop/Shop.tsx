@@ -40,14 +40,13 @@ const Shop = () => {
         </Flex>
       </Stack>
       {allProducts && (
-        <SimpleGrid pt={0} pb={20} px={4} gap={4} columns={{ base: 1, lg: 5 }}>
+        <SimpleGrid pt={0} pb={20} px={4} gap={4} columns={{ base: 1, lg: 4 }}>
           {allProducts.map((product, index) => {
             return (
-              <GridItem onClick={() => dispatch.globalModel.handleUnload([isUnloading, () => navigate(`/product/${product.handle}`)])} gap={2} as={Stack}>
+              <GridItem key={product.id} onClick={() => dispatch.globalModel.handleUnload([isUnloading, () => navigate(`/product/${product.handle}`)])} gap={2} as={Stack}>
                 <Image boxShadow="rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px" objectFit={"cover"} aspectRatio={1} src={product?.images?.[0]?.src} />
                 <Flex gap={2} alignItems={"center"}>
                   <Text fontSize="3xl" as="i" className="fa-sharp fa-solid fa-angle-right" />
-
                   <Text isTruncated textTransform={"uppercase"} pl={1} fontWeight={500} fontSize="3xl" fontFamily={"hanken"}>
                     {product?.title}
                   </Text>

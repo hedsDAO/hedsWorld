@@ -106,9 +106,7 @@ const Product = () => {
               <Text textTransform={"uppercase"} fontFamily={"Helvetica"} letterSpacing={"wide"} color="blackAlpha.900" fontSize="3xl">
                 {product?.title}
               </Text>
-              <Text mt={0} lineHeight={1.35} maxW={{ lg: "75%" }} fontFamily={"Helvetica"} fontSize="xs" textColor={"blackAlpha.700"}>
-                {product?.description}
-              </Text>
+              <Text dangerouslySetInnerHTML={{ __html: product?.descriptionHtml || "" }} mt={0} lineHeight={1.35} maxW={{ lg: "75%" }} fontFamily={"Helvetica"} fontSize="xs" textColor={"blackAlpha.700"}></Text>
               <Text fontFamily={"open"} fontWeight={700} fontSize={"sm"}>
                 {formatPrice(selectedVariant === null ? product?.variants[0]?.price?.amount : product?.variants[selectedVariant]?.price?.amount)}
               </Text>
