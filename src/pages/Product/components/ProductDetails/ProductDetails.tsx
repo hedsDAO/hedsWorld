@@ -44,6 +44,7 @@ const ProductDetails = () => {
                 onClick={() => dispatch.productModel.setSelectedVariant(index)}
                 fontSize={"sm"}
                 py={1}
+                key={index + variant.id}
                 borderBottom={"1px solid"}
                 _focus={{ bg: "black", color: "white" }}
                 _hover={{ bg: "black", color: "white" }}

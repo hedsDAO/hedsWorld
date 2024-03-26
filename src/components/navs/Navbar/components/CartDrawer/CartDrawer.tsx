@@ -22,7 +22,7 @@ const CartDrawer = () => {
         <DrawerBody minW="100%" px={6} mt={6} gap={3} as={Stack}>
           {checkoutLineItems?.length ? (
             checkoutLineItems?.map((lineItem) => (
-              <Flex gap={6} alignItems={"center"}>
+              <Flex key={lineItem.id} gap={6} alignItems={"center"}>
                 <Image rounded={"sm"} maxH="80px" src={lineItem?.variant?.image.src || ""} objectFit={"cover"} aspectRatio={1} />
                 <Stack mt={-1} gap={0}>
                   <Text textTransform={"uppercase"} fontFamily={"hanken"} fontSize={"lg"} fontWeight={600} key={lineItem.id}>
