@@ -1,15 +1,22 @@
-import IMAGES from "@/images";
-import { Dispatch, store } from "@/store/store";
-import { Box, Fade } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import * as constants from "./constants";
-import * as styles from "./styles";
+import { Dispatch, store } from "@/store/store";
+import { Box, Fade } from "@chakra-ui/react";
+import * as constants from "@/pages/Landing/components/LandingBackgroundVideo/constants";
+import * as styles from "@/pages/Landing/components/LandingBackgroundVideo/styles";
+import IMAGES from "@/images";
+
+/**
+ * @name LandingBackgroundVideo
+ * @description displays the landing background video.
+ * @returns {JSX.Element} LandingBackgroundVideo component
+ */
 
 const LandingBackgroundVideo = () => {
+  const dispatch = useDispatch<Dispatch>();
   const navigate = useNavigate();
   const isUnloading = useSelector(store.select.globalModel.selectIsUnloading);
-  const dispatch = useDispatch<Dispatch>();
+
   return (
     <Fade {...styles.$fadeStyle1} in={true && !isUnloading}>
       <Box

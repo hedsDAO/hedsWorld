@@ -1,9 +1,15 @@
-import { Flex, Fade, Text } from "@chakra-ui/react";
-import { useDispatch, useSelector } from "react-redux";
 import { Dispatch, store } from "@/store/store";
 import { useNavigate } from "react-router-dom";
-import * as constants from "./constants";
-import * as styles from "./styles";
+import { Flex, Fade, Text } from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
+import * as constants from "@/pages/Landing/components/LandingNavigation/constants";
+import * as styles from "@/pages/Landing/components/LandingNavigation/styles";
+
+/**
+ * @name LandingNavigation
+ * @description displays the landing navigation.
+ * @returns {JSX.Element} LandingNavigation component
+ */
 
 const LandingNavigation = () => {
   const dispatch = useDispatch<Dispatch>();

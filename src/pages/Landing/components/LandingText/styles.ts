@@ -32,7 +32,7 @@ export const $fadeStyle1: FadeProps = {
 export const $textStyle2: TextProps = {
   lineHeight: 0.95,
   maxW: {
-  base: "3ch",
+  base: "4ch",
   lg: "100%"
 },
   textAlign: {
@@ -42,7 +42,7 @@ export const $textStyle2: TextProps = {
   pointerEvents: "auto",
   cursor: "pointer",
   fontSize: {
-  base: 180,
+  base: 120,
   lg: 200
 },
   color: "white",
