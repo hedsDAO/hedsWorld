@@ -3,6 +3,8 @@ import { formatPrice } from "@/store/utils";
 import { Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Image, Stack, Text } from "@chakra-ui/react";
 import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import CheckoutButton from "./components/CheckoutButton/CheckoutButton";
+import SubtotalText from "./components/SubtotalText/SubtotalText";
 
 const CartDrawer = () => {
   const tempRef = useRef(null);
@@ -20,7 +22,7 @@ const CartDrawer = () => {
         <Divider />
         <DrawerCloseButton />
         <DrawerBody minW="100%" px={6} mt={6} gap={3} as={Stack}>
-        {checkoutLineItems?.length ? (
+          {checkoutLineItems?.length ? (
             checkoutLineItems?.map((lineItem) => (
               <Flex key={lineItem.id} gap={6} alignItems={"center"}>
                 <Image rounded={"sm"} maxH="80px" src={lineItem?.variant?.image.src || ""} objectFit={"cover"} aspectRatio={1} />
@@ -74,41 +76,8 @@ const CartDrawer = () => {
           )}
         </DrawerBody>
         <DrawerFooter gap={4} as={Stack}>
-          <Flex minW="100%" justifyContent={"space-between"}>
-            <Text fontWeight={500} color="heds.500" fontFamily={"hanken"} fontSize={"sm"}>
-              SUBTOTAL
-            </Text>
-            <Text fontWeight={700} color="black" fontFamily={"hanken"} fontSize={"sm"}>
-              {formatPrice(checkout?.subtotalPrice.amount)}
-            </Text>
-          </Flex>
-          <Button
-            isDisabled={!checkout?.webUrl || !checkoutLineItems?.length}
-            onClick={() => {
-              dispatch.globalModel.handleUnload([
-                false,
-                () => {
-                  if (window && checkout?.webUrl) {
-                    dispatch.cartModel.setIsDrawerOpen(false);
-                    window.location.href = checkout?.webUrl;
-                  }
-                },
-              ]);
-            }}
-            size="sm"
-            bg="white"
-            color="black"
-            border="1px solid"
-            borderColor="black"
-            _hover={{ bg: "black", color: "white" }}
-            transition="0.2s all ease-in-out"
-            rounded="full"
-            minW="100%"
-          >
-            <Text fontFamily={"hanken"} fontSize={"xs"} fontWeight={600} textTransform={"uppercase"}>
-              checkout
-            </Text>
-          </Button>
+          <SubtotalText />
+          <CheckoutButton />
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
