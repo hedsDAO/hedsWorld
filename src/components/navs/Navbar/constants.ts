@@ -8,13 +8,13 @@ export interface NavLink {
 export const NavLinks = [
   {
     id: "shop",
-    name: "SHOP",
+    name: "shop",
     path: "/shop",
     external: false,
   },
   {
     id: "events",
-    name: "EVENTS",
+    name: "events",
     path: "https://heds.space",
     external: true,
   },
