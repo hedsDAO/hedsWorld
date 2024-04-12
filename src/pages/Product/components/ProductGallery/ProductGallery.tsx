@@ -19,7 +19,13 @@ const ProductGallery = ({ images }: { images: ImageProps[] }) => {
   const swiperRef = useRef<any>(null);
   const selectedVariant = useSelector(store.select.productModel.selectVariant);
   const product = useSelector(store.select.productModel.selectProduct);
-  const navigateToSlide = (index: number) => (swiperRef.current ? () => swiperRef.current.slideTo(index) : null);
+
+  const navigateToSlide = (index: number) => {
+    if (swiperRef.current) {
+      swiperRef.current.slideTo(index);
+    }
+  };
+
   useEffect(() => {
     if (selectedVariant !== null) {
       const variantData = product?.variants?.[selectedVariant];

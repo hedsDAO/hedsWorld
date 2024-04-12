@@ -28,10 +28,10 @@ export const $imageStyles: ImageProps = {
 };
 
 export const $simpleGridStyles: SimpleGridProps = {
-  mt: 2,
+  mt: {base: 5, lg:2},
   mb: 2,
   gap: 1,
-  columns: 3,
+  columns: { base: 4, lg: 3 },
 };
 
 export const $gridItemStyles = {
