@@ -27,4 +27,5 @@ export const $gridItemStyles = {
 
 export const $gridItemStyles2 = {
   colSpan: { base: 9, lg: 4 },
+  mt: { base: 16, lg: 0 },
 }
