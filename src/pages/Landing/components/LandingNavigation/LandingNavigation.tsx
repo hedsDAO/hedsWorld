@@ -32,11 +32,11 @@ const LandingNavigation = () => {
           {constants.text3}
         </Text>
       </Fade>
-      <Fade {...styles.$fadeStyle7} in={true && !isUnloading}>
+      {/* <Fade {...styles.$fadeStyle7} in={true && !isUnloading}>
         <Text href={constants.voteURL} target={constants.target} {...styles.$textStyle8} as={constants.aHTML}>
           {constants.text4}
         </Text>
-      </Fade>
+      </Fade> */}
     </Flex>
   );
 };
